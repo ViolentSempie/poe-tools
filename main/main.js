@@ -44,15 +44,17 @@ function makeInteractive() {
     let isInteractive = false;
 
     function toggleOverlayState() {
-        if (isInteractive) {
-            isInteractive = false;
+        isInteractive = !isInteractive;
+
+        if (!isInteractive) {
             OverlayController.focusTarget();
-            window.webContents.send("focus-change", false);
+            ScreenshotManager.stop();
         } else {
-            isInteractive = true;
             OverlayController.activateOverlay();
-            window.webContents.send("focus-change", true);
+            ScreenshotManager.start();
         }
+
+        window.webContents.send("focus-change", isInteractive);
     }
 
     window.on("blur", () => {
