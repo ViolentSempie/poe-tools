@@ -1,8 +1,9 @@
+import { PoeEventManager } from "./poe-events/poe-event-manager";
+
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
+const { app, BrowserWindow, globalShortcut } = require("electron");
 const path = require("path");
 const { OverlayController, OVERLAY_WINDOW_OPTS } = require("electron-overlay-window");
-const { Tail } = require("tail");
 
 const toggleMouseKey = "CmdOrCtrl + ;";
 
@@ -62,27 +63,10 @@ const createOverlay = () => {
     );
 };
 
-ipcMain.on("poe-client-event-start", (event: any, args: any[]) => {
-    console.log(args);
-
-    try {
-        const tail = new Tail(args[0]);
-    
-        tail.on("line", (line: string) => {
-            console.log(line);
-        });
-    
-        tail.on("error", (error: Error) => {
-            console.error("Error reading log file", error);
-        });
-    
-        tail.watch();
-    } catch (error) {
-        console.error(error);
-    }
-});
 
 app.on("ready", () => {
+    const poeEventManager = new PoeEventManager();
+
     setTimeout(
         createOverlay,
         process.platform === "linux" ? 1000 : 0 // https://github.com/electron/electron/issues/16809
