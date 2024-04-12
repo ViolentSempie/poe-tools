@@ -3,6 +3,8 @@ import { RouteData } from "./route-processing/types";
 import { RenderFragment } from "./route-processing/render-fragment";
 import { reduce } from "@/utils/reduce";
 import Divider from "@/components/divider";
+import { useEffect } from "react";
+import { usePoeClientEvents } from "@/hooks/poe-client-event";
 
 function getSteps(currentSection: RouteData.Section, currentStep: number) {
     // Go through the currentSection.steps and return all the steps until we find a section.parts[1].type === "enter"
@@ -26,6 +28,11 @@ export function Leveling() {
     const sections = useLevelingStore((state) => state.sections);
     const section = useLevelingStore((state) => state.section);
     const step = useLevelingStore((state) => state.step);
+    const lastPoeEvent = usePoeClientEvents();
+
+    useEffect(() => {
+        console.log(lastPoeEvent);
+    }, [lastPoeEvent]);
 
     const currentSection = sections[section];
     const steps = getSteps(currentSection, step);
