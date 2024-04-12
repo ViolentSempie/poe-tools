@@ -1282,6 +1282,11 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.8.tgz#8268a8c57a3e4abd25c165ecd36237db7948a55e"
   integrity sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==
 
+"@types/tail@^2.2.3":
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/@types/tail/-/tail-2.2.3.tgz#e7701ae040d0aacf2d78d7cbb71e016f304bc446"
+  integrity sha512-Hnf352egOlDR4nVTaGX0t/kmTNXHMdovF2C7PVDFtHTHJPFmIspOI1b86vEOxU7SfCq/dADS7ptbqgG/WGGxnA==
+
 "@types/verror@^1.10.3":
   version "1.10.10"
   resolved "https://registry.yarnpkg.com/@types/verror/-/verror-1.10.10.tgz#d5a4b56abac169bfbc8b23d291363a682e6fa087"
@@ -6147,6 +6152,11 @@ supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
+
+tail@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/tail/-/tail-2.2.6.tgz#24abd701963639b896c42496d5f416216ec0b558"
+  integrity sha512-IQ6G4wK/t8VBauYiGPLx+d3fA5XjSVagjWV5SIYzvEvglbQjwEcukeYI68JOPpdydjxhZ9sIgzRlSmwSpphHyw==
 
 tailwindcss@^3.4.1:
   version "3.4.3"

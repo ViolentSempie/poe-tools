@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, globalShortcut } = require("electron");
-const serve = require("electron-serve");
+const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
 const path = require("path");
 const { OverlayController, OVERLAY_WINDOW_OPTS } = require("electron-overlay-window");
-
-const appServe = app.isPackaged ? serve({
-    directory: path.join(__dirname, "../out")
-}) : null;
+const { Tail } = require("tail");
 
 const toggleMouseKey = "CmdOrCtrl + ;";
 
@@ -65,6 +61,26 @@ const createOverlay = () => {
         { hasTitleBarOnMac: true }
     );
 };
+
+ipcMain.on("poe-client-event-start", (event: any, args: any[]) => {
+    console.log(args);
+
+    try {
+        const tail = new Tail(args[0]);
+    
+        tail.on("line", (line: string) => {
+            console.log(line);
+        });
+    
+        tail.on("error", (error: Error) => {
+            console.error("Error reading log file", error);
+        });
+    
+        tail.watch();
+    } catch (error) {
+        console.error(error);
+    }
+});
 
 app.on("ready", () => {
     setTimeout(

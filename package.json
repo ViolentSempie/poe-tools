@@ -54,6 +54,8 @@
     "zustand": "^4.5.2"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "@types/tail": "^2.2.3",
+    "electron-squirrel-startup": "^1.0.0",
+    "tail": "^2.2.6"
   }
 }
