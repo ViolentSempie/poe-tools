@@ -6,7 +6,7 @@ This tool only reads the Client.txt log file.
 
 ## Inspirations
 
-This tool was inspired by (Lailloken-UI)[https://github.com/Lailloken/Lailloken-UI].
+This tool was inspired by [Lailloken-UI](https://github.com/Lailloken/Lailloken-UI).
 However, since I run on Linux, I cannot run his tool.
 This app is for those who don't want to run AutoHotkey or can't because they play on Linux / MacOS.
 
@@ -14,7 +14,7 @@ This app is for those who don't want to run AutoHotkey or can't because they pla
 
 ### Leveling tracker (in development)
 
-Tracks your leveling progress using (Exile Leveling)[https://heartofphos.github.io/exile-leveling/].
+Tracks your leveling progress using [Exile Leveling](https://heartofphos.github.io/exile-leveling/).
 
 ## Getting Started
 
