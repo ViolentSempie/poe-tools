@@ -1,5 +1,6 @@
 import { useLevelingStore } from "@/stores/leveling";
-import { ClipboardIcon } from "@heroicons/react/24/solid";
+import { faClipboard } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
 export function ExileLevelingString() {
@@ -40,7 +41,7 @@ export function ExileLevelingString() {
                     type="button"
                     className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-100 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                 >
-                    <ClipboardIcon onClick={setExileLevelingString} className="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                    <FontAwesomeIcon icon={faClipboard} onClick={setExileLevelingString} className="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
                 </button>
             </div>
 

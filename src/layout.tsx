@@ -10,7 +10,7 @@ export default function RootLayout() {
 
   return (
     <div className={`absolute w-full h-full bg-transparent ${inter.className}`}>
-      <main className="absolute w-full h-full border border-red-600 bg-transparent">
+      <main className="absolute w-full h-full bg-transparent">
         <Settings />
 
         {sections.length && <Leveling />}

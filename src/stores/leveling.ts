@@ -6,9 +6,11 @@ type LevelingStore = {
     sections: RouteData.Section[];
     section: number;
     step: number;
+    lastUpdate: number;
     setSections: (sections: RouteData.Section[]) => void;
     nextSection: () => void;
-    advanceStep: () => void;
+    setStep: (step: number) => void;
+    setLastUpdate: (lastUpdate: number) => void;
 };
 
 export const useLevelingStore = create<LevelingStore>()(
@@ -18,12 +20,14 @@ export const useLevelingStore = create<LevelingStore>()(
                 sections: [],
                 section: 0,
                 step: 0,
+                lastUpdate: 0,
                 setSections: (sections: RouteData.Section[]) => set({ sections }),
                 nextSection: () => set({
                     section: get().section + 1,
                     step: 0,
                 }),
-                advanceStep: () => set({ step: get().step + 1 }),
+                setStep: (step: number) => set({ step }),
+                setLastUpdate: (lastUpdate: number) => set({ lastUpdate }),
             }),
             {
                 name: "leveling-store",

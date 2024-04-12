@@ -11,8 +11,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
+    "@fortawesome/free-regular-svg-icons": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "^1.7.18",
-    "@heroicons/react": "^2.1.3",
     "@uidotdev/usehooks": "^2.4.1",
     "electron-overlay-window": "^3.3.0",
     "electron-serve": "^1.3.0",
