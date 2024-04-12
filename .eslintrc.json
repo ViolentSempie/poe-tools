@@ -25,7 +25,7 @@
         },
         "typescript": {
             "alwaysTryTypes": true,
-            "project": "tsconfig-lint.json"
+            "project": "tsconfig.json"
         }
     }
   },
