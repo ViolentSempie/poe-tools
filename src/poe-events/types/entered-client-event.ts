@@ -1,10 +1,10 @@
 import { ClientEvent, ClientEventType } from "./client-event";
 
-export interface EnteredClientEvent extends ClientEvent {
+export type EnteredClientEvent = ClientEvent & {
     type: ClientEventType.Entered;
     lastGeneratedLocation: string | null;
     locationName: string;
-}
+};
 
 let lastGeneratedId: string | null = null;
 

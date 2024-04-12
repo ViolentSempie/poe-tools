@@ -4,12 +4,11 @@ export enum ClientEventType
     Unknown,
 }
 
-export interface ClientEvent
-{
+export type ClientEvent = {
     id: string;
     timestamp: number;
     severity: string;
     sourceId: string;
     sourceType: string;
     type: ClientEventType;
-}
+};
