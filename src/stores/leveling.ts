@@ -30,7 +30,7 @@ export const useLevelingStore = create<LevelingStore>()(
                 setLastUpdate: (lastUpdate: number) => set({ lastUpdate }),
             }),
             {
-                name: "leveling-store",
+                name: "leveling-store-2",
             }
         )
     )

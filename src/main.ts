@@ -1,18 +1,16 @@
 import { ScreenshotManager } from "./screenshot/screenshot-manager";
+import { PoeEventManager } from "./poe-events/poe-event-manager";
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { app, BrowserWindow, globalShortcut } = require("electron");
-const serve = require("electron-serve");
 const path = require("path");
 const { OverlayController, OVERLAY_WINDOW_OPTS } = require("electron-overlay-window");
 
-const appServe = app.isPackaged ? serve({
-    directory: path.join(__dirname, "../out")
-}) : null;
-
-const toggleMouseKey = "CmdOrCtrl + P";
+const toggleMouseKey = "CmdOrCtrl + ;";
 
 const createOverlay = () => {
     const screenshotManager = new ScreenshotManager();
+
     const browserWindow = new BrowserWindow({
         width: 400,
         height: 300,
@@ -65,8 +63,10 @@ const createOverlay = () => {
         { hasTitleBarOnMac: true }
     );
 
+    const poeEventManager = new PoeEventManager(browserWindow);
     // screenshotManager.start();
 };
+
 
 app.on("ready", () => {
     setTimeout(

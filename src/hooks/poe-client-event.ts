@@ -1,18 +1,21 @@
+import { useLevelingStore } from "@/stores/leveling";
 import { useEffect, useState } from "react";
-// const { ipcRenderer } = window.require("electron");
 
 export function usePoeClientEvents() {
     const [lastEvent, setLastEvent] = useState("");
+    const logFilePath = useLevelingStore.getState().logFilePath;
 
-    // useEffect(() => {
-    //     ipcRenderer.on("poe-client-event", (event, data) => {
-    //         setLastEvent(data);
-    //     });
+    useEffect(() => {
+        window.electron.send("poe-client-event-start", logFilePath);
+        window.electron.on("poe-client-event", (event, data) => {
+            console.log(event, data);
+            setLastEvent(data);
+        });
 
-    //     return () => {
-    //         ipcRenderer.removeAllListeners("poe-client-event");
-    //     };
-    // }, []);
+        return () => {
+            window.electron.removeAllListeners("poe-client-event");
+        };
+    }, []);
 
     return lastEvent;
 }

@@ -1,6 +1,6 @@
 ## Sempie's PoE tools
 
-This is an electron / react / next.js app with some tools that I enjoy.<br />
+This is an electron / react / vite app with some tools that I enjoy.<br />
 Follows the PoE third-party guidelines as much as I can.<br />
 This tool only reads the Client.txt log file.
 
@@ -21,5 +21,5 @@ Tracks your leveling progress using [Exile Leveling](https://heartofphos.github.
 First, run the development server:
 
 ```bash
-yarn dev
+yarn start
 ```
