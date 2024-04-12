@@ -1,3 +1,5 @@
+import { ScreenshotManager } from "./screenshot/screenshot-manager";
+
 const { app, BrowserWindow, globalShortcut } = require("electron");
 const serve = require("electron-serve");
 const path = require("path");
@@ -10,6 +12,7 @@ const appServe = app.isPackaged ? serve({
 const toggleMouseKey = "CmdOrCtrl + P";
 
 const createOverlay = () => {
+    const screenshotManager = new ScreenshotManager();
     const browserWindow = new BrowserWindow({
         width: 400,
         height: 300,
@@ -28,10 +31,8 @@ const createOverlay = () => {
 
             if (!isInteractive) {
                 OverlayController.focusTarget();
-                // ScreenshotManager.stop();
             } else {
                 OverlayController.activateOverlay();
-                // ScreenshotManager.start();
             }
 
             browserWindow.webContents.send("focus-change", isInteractive);
@@ -49,7 +50,7 @@ const createOverlay = () => {
     // and load the index.html of the app.
     if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
         browserWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
-        
+
         // Open the DevTools.
         browserWindow.webContents.openDevTools({ mode: "detach", activate: false });
     } else {
@@ -63,6 +64,8 @@ const createOverlay = () => {
         "Path of Exile",
         { hasTitleBarOnMac: true }
     );
+
+    // screenshotManager.start();
 };
 
 app.on("ready", () => {
