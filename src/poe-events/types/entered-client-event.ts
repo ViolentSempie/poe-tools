@@ -2,7 +2,7 @@ import { ClientEvent, ClientEventType } from "./client-event";
 
 export type EnteredClientEvent = ClientEvent & {
     type: ClientEventType.Entered;
-    lastGeneratedLocation: string | null;
+    locationId: string | null;
     locationName: string;
 };
 
@@ -27,7 +27,7 @@ export function parseEnteredEvent(baseData: ClientEvent, extra: string[]) {
     return {
         ...baseData,
         type: ClientEventType.Entered,
-        lastGeneratedLocation: lastGeneratedId,
+        locationId: lastGeneratedId,
         locationName,
     };
 }
