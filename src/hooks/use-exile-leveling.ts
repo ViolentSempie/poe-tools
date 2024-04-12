@@ -1,10 +1,9 @@
-import { FragmentStep } from './../leveling-tracker/route-processing/types.d';
 import { Fragments } from "@/leveling-tracker/route-processing/fragments/types";
 import { RouteData } from "@/leveling-tracker/route-processing/types";
 import { ClientEvent, ClientEventType } from "@/poe-events/types/client-event";
 import { EnteredClientEvent } from "@/poe-events/types/entered-client-event";
 import { useLevelingStore } from "@/stores/leveling";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 function getSteps(currentSection: RouteData.Section, currentStep: number) {
     // Go through the currentSection.steps and return all the steps until we find a section.parts[1].type === "enter"
@@ -14,7 +13,14 @@ function getSteps(currentSection: RouteData.Section, currentStep: number) {
         const step = currentSection.steps[i];
         steps.push(step);
 
-        const isEnterStep = step.type === "fragment_step" && typeof step.parts[1] !== "string" && step.parts[1].type === "enter";
+        if (step.type === "fragment_step" && typeof step.parts[0] !== "string") {
+            break;
+        }
+
+        const isEnterStep = step.type === "fragment_step" &&
+            typeof step.parts[1] !== "undefined" &&
+            typeof step.parts[1] !== "string" &&
+            step.parts[1].type === "enter";
 
         if (isEnterStep) {
             break;
@@ -24,33 +30,49 @@ function getSteps(currentSection: RouteData.Section, currentStep: number) {
     return steps;
 }
 
+function getCurrentSection() {
+    const sections = useLevelingStore.getState().sections;
+    const section = useLevelingStore.getState().section;
+
+    return sections[section];
+}
+
 export function useExileLeveling() {
-    const sections = useLevelingStore((state) => state.sections);
-    const section = useLevelingStore((state) => state.section);
-    const step = useLevelingStore((state) => state.step);
+    const data = useLevelingStore(state => state.currentSteps);
+    const setData = useLevelingStore(state => state.setCurrentSteps);
 
-    const currentSection = sections[section];
-    const [currentSteps, setCurrentSteps] = useState<(RouteData.FragmentStep | RouteData.GemStep)[]>(getSteps(currentSection, step));
-
-    const enterStep = currentSteps[currentSteps.length - 1];
-    const nextStep = step + currentSteps.length;
 
     useEffect(() => {
-        window.electron.on("poe-client-event", (event, data: ClientEvent) => {
+        window.electron.on("poe-client-event", function (event, data: ClientEvent) {
             // parse event
-            console.log(event, data, enterStep);
             if (data.type !== ClientEventType.Entered) {
                 return;
             }
 
-            const enteredEvent = data as EnteredClientEvent;
-            const enterStepLocation = (enterStep as FragmentStep).parts[1] as Fragments.EnterFragment;
+            const { step, setStep, currentSteps, setCurrentSteps } = useLevelingStore.getState();
+            const currentSection = getCurrentSection();
 
-            if (enteredEvent.locationId === enterStepLocation.areaId) {
+            const enterStep = currentSteps[currentSteps.length - 1];
+            const nextStep = step + currentSteps.length;
+
+            const enteredEvent = data as EnteredClientEvent;
+            const enterStepLocation = (enterStep as RouteData.FragmentStep).parts[1] as Fragments.EnterFragment;
+            const waypointStepLocation = (enterStep as RouteData.FragmentStep).parts[0] as Fragments.WaypointUseFragment;
+
+            const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId;
+
+            if (enteredEvent.locationId === nextLocation) {
+                setStep(nextStep);
                 setCurrentSteps(getSteps(currentSection, nextStep));
             }
         });
+
+        // Initialize
+        const step = useLevelingStore.getState().step;
+        const currentSection = getCurrentSection();
+
+        setData(getSteps(currentSection, step));
     }, []);
 
-    return currentSteps;
+    return data;
 }

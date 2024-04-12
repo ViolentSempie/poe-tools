@@ -1,4 +1,4 @@
-import { GameData } from "../../types";
+import { GameData } from "@/data/types";
 
 export namespace Fragments {
     export type AnyFragment =

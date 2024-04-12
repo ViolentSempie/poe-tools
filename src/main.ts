@@ -63,7 +63,7 @@ const createOverlay = () => {
         { hasTitleBarOnMac: true }
     );
 
-    const poeEventManager = new PoeEventManager(browserWindow);
+    new PoeEventManager(browserWindow);
     // screenshotManager.start();
 };
 

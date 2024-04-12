@@ -2,12 +2,24 @@ import { reduce } from "@/utils/reduce";
 import { RouteData } from "./types";
 import { KillFragment } from "./fragments/kill-fragment";
 import { EnterFragment } from "./fragments/enter-fragment";
+import { WaypointUseFragment } from "./fragments/waypoint-use-fragment";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
 }
 
 export function RenderFragment({ fragment }: RenderFragmentProps) {
+    if (fragment.parts.length === 1) {
+        if (typeof fragment.parts[0] === "string") {
+            return <div>{fragment.parts[0] as string}</div>;
+        }
+
+        return reduce(fragment.parts[0].type, {
+                waypoint_use: () => <WaypointUseFragment fragment={fragment} />,
+                _: () => <div>Unknown type</div>, 
+                // waypoint_get: () => <WaypointGetFragment fragment={fragment} />,
+        });
+    }
     if (fragment.parts.length === 1 || typeof fragment.parts[1] === "string") {
         return <div>{fragment.parts[0] as string}</div>;
     }
