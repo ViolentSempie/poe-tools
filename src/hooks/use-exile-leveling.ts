@@ -61,10 +61,18 @@ export function useExileLeveling() {
 
             const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId;
 
-            if (enteredEvent.locationId === nextLocation) {
-                setStep(nextStep);
-                setCurrentSteps(getSteps(currentSection, nextStep));
+            if (enteredEvent.locationId !== nextLocation) {
+                return;
             }
+
+            if (nextStep >= currentSection.steps.length) {
+                useLevelingStore.getState().nextSection();
+                setCurrentSteps(getSteps(getCurrentSection(), 0));
+                return;
+            }
+
+            setStep(nextStep);
+            setCurrentSteps(getSteps(currentSection, nextStep));
         });
 
         // Initialize
