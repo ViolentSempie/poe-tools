@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { app, BrowserWindow, globalShortcut } = require("electron");
 const serve = require("electron-serve");
 const path = require("path");
@@ -7,7 +8,7 @@ const appServe = app.isPackaged ? serve({
     directory: path.join(__dirname, "../out")
 }) : null;
 
-const toggleMouseKey = "CmdOrCtrl + P";
+const toggleMouseKey = "CmdOrCtrl + ;";
 
 const createOverlay = () => {
     const browserWindow = new BrowserWindow({
