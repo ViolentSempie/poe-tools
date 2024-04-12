@@ -12,5 +12,22 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
+  "settings": {
+    "react": {
+        "version": "detect"
+    },
+    "import/parsers": {
+        "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+        "node": {
+            "extensions": [".ts", ".tsx"]
+        },
+        "typescript": {
+            "alwaysTryTypes": true,
+            "project": "tsconfig-lint.json"
+        }
+    }
+  },
   "parser": "@typescript-eslint/parser"
 }
