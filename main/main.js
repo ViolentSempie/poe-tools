@@ -7,7 +7,7 @@ const appServe = app.isPackaged ? serve({
     directory: path.join(__dirname, "../out")
 }) : null;
 
-const toggleMouseKey = "CmdOrCtrl + J";
+const toggleMouseKey = "CmdOrCtrl + P";
 let window = null;
 
 const createOverlay = () => {
@@ -23,19 +23,15 @@ const createOverlay = () => {
 
     // If the app is build, we serve the build version
     if (app.isPackaged) {
-        appServe(window).then(() => {
-            window.loadURL("app://-");
-        });
+        appServe(window).then(() => window.loadURL("app://-"));
     } else {
         // Load Next.JS app in development
         window.loadURL("http://localhost:3000");
         window.webContents.openDevTools({ mode: "detach", activate: false });
-        window.webContents.on("did-fail-load", (e, code, desc) => {
-            window.webContents.reloadIgnoringCache();
-        });
+        window.webContents.on("did-fail-load", window.webContents.reloadIgnoringCache);
     }
 
-    makeDemoInteractive();
+    makeInteractive();
 
     OverlayController.attachByTitle(
         window,
@@ -44,7 +40,7 @@ const createOverlay = () => {
     );
 };
 
-function makeDemoInteractive() {
+function makeInteractive() {
     let isInteractive = false;
 
     function toggleOverlayState() {
