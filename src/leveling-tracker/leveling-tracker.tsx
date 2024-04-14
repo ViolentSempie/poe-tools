@@ -8,7 +8,7 @@ export function Leveling() {
     const steps = useExileLeveling();
 
     return (
-        <div className="absolute right-[730px] bottom-[35px] rounded-md bg-slate-800 text-gray-100">
+        <div className="absolute right-[730px] bottom-[35px] rounded-md bg-slate-800 text-gray-100 opacity-90">
             <div className="flow-root mt-2 px-4">
                 <div className="flex flex-col gap-y-2">
                     {steps.map((step, index) => (
