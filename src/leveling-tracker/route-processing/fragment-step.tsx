@@ -18,6 +18,9 @@ import { GenericPart } from "./fragments/generic-part";
 import { PortalUsePart } from "./fragments/portal-use-part";
 import { PortalSetPart } from "./fragments/portal-set-part";
 import { AreaPart } from "./fragments/area-part";
+import { ReactNode } from "react";
+import { NotImplementedPart } from "./fragments/not-implemented-part";
+import { AscendPart } from "./fragments/ascend-part";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
@@ -47,8 +50,12 @@ export function FragmentStep({ fragment }: RenderFragmentProps) {
                             portal_use: () => <PortalUsePart part={part as Fragments.PortalUseFragment} />,
                             portal_set: () => <PortalSetPart part={part as Fragments.PortalSetFragment} />,
                             area: () => <AreaPart part={part as Fragments.AreaFragment} />,
-                            _: () => <div>Unknown type {part.type}</div>,
-                        })}
+                            copy: () => <NotImplementedPart type="copy" part={part} />,
+                            ascend: () => <AscendPart part={part as Fragments.AscendFragment} />,
+                            reward_quest: () => <NotImplementedPart type="reward_quest" part={part} />,
+                            reward_vendor: () => <NotImplementedPart type="reward_vendor" part={part} />,
+                            _: () => <NotImplementedPart type={part.type} part={part} />,
+                        } as Record<typeof part.type | "_", () => ReactNode>)}
                     </div>
                 ))}
             </div>

@@ -38,13 +38,17 @@ export const useLevelingStore = create<LevelingStore>()(
                 lastUpdate: 0,
                 getSection(section: number | null = null) {
                     section ??= get().section;
-                    return get().sections[section];
+                    return get().sections[section] ?? null;
                 },
                 getSteps(section: number, currentStep: number): RouteData.Step[] {
                     // Go through the currentSection.steps and return all the steps until we find a section.parts[1].type === "enter"
                     const currentSection = get().getSection(section);
                     const steps = [];
                     let index = currentStep;
+
+                    if (currentSection === null) {
+                        return [];
+                    }
                 
                     for (index; index < currentSection.steps.length; index++) {
                         const step = currentSection.steps[index];
