@@ -1,8 +1,9 @@
 import { RouteData } from "./route-processing/types";
-import { RenderFragment } from "./route-processing/render-fragment";
+import { FragmentStep } from "./route-processing/fragment-step";
 import { reduce } from "@/utils/reduce";
 import Divider from "@/components/divider";
 import { useExileLeveling } from "@/hooks/use-exile-leveling";
+import { GemStep } from "./route-processing/gem-step";
 
 export function Leveling() {
     const steps = useExileLeveling();
@@ -15,7 +16,8 @@ export function Leveling() {
                         <div key={index}>
                             <div className="relative">
                                 {reduce(step.type, {
-                                    fragment_step: () => <RenderFragment fragment={step as RouteData.FragmentStep} />,
+                                    fragment_step: () => <FragmentStep fragment={step as RouteData.FragmentStep} />,
+                                    gem_step: () => <GemStep gemStep={step as RouteData.GemStep} />,
                                     _: () => <div>Unknown step type</div>,
                                 })}
                             </div>

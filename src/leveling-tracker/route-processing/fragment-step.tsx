@@ -12,12 +12,13 @@ import { WaypointPart } from "./fragments/waypoint-part";
 import { ArenaPart } from "./fragments/arena-part";
 import { QuestTextPart } from "./fragments/quest-text-part";
 import { DirectionPart } from "./fragments/direction-part";
+import { QuestPart } from "./fragments/quest-part";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
 }
 
-export function RenderFragment({ fragment }: RenderFragmentProps) {
+export function FragmentStep({ fragment }: RenderFragmentProps) {
     return (
         <div className="flex flex-col">
             <div className="flex flex-row">
@@ -30,6 +31,7 @@ export function RenderFragment({ fragment }: RenderFragmentProps) {
                             trial: () => <TrialPart />,
                             arena: () => <ArenaPart part={part as Fragments.ArenaFragment} />,
                             logout: () => <LogoutPart part={part as Fragments.LogoutFragment} />,
+                            quest: () => <QuestPart part={part as Fragments.QuestFragment} />,
                             quest_text: () => <QuestTextPart part={part as Fragments.QuestTextFragment} />,
                             waypoint: () => <WaypointPart />,
                             waypoint_get: () => <WaypointGetPart />,
@@ -42,7 +44,7 @@ export function RenderFragment({ fragment }: RenderFragmentProps) {
             </div>
 
             {fragment.subSteps.map((subStep, index) => (
-                <RenderFragment key={index} fragment={subStep} />
+                <FragmentStep key={index} fragment={subStep} />
             ))}
             {/* {reduce(fragment.parts[1].type, {
                 kill: () => <KillFragment fragment={fragment} />,
