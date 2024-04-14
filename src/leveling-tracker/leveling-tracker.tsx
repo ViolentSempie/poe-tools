@@ -12,7 +12,7 @@ export function Leveling() {
     const previousStep = useLevelingStore((state) => state.previousStep);
 
     return (
-        <div className="absolute right-[730px] bottom-[35px] rounded-md bg-slate-800 text-gray-100 opacity-90">
+        <div className="absolute right-1/2 bottom-[38px] rounded-md bg-slate-800 text-gray-100 opacity-90">
             <div className="flow-root mt-2 px-4">
                 <div className="flex flex-col gap-y-2">
                     {steps.map((step, index) => (
