@@ -9,6 +9,7 @@ type LevelingStore = {
     currentSteps: (RouteData.FragmentStep | RouteData.GemStep)[];
     lastUpdate: number;
     setSections: (sections: RouteData.Section[]) => void;
+    setSection: (section: number) => void;
     nextSection: () => void;
     setStep: (step: number) => void;
     setCurrentSteps: (currentSteps: (RouteData.FragmentStep | RouteData.GemStep)[]) => void;
@@ -25,6 +26,7 @@ export const useLevelingStore = create<LevelingStore>()(
                 currentSteps: [],
                 lastUpdate: 0,
                 setSections: (sections: RouteData.Section[]) => set({ sections }),
+                setSection: (section: number) => set({ section }),
                 nextSection: () => set({
                     section: get().section + 1,
                     step: 0,

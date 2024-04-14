@@ -41,8 +41,70 @@ export function useExileLeveling() {
     const data = useLevelingStore(state => state.currentSteps);
     const setData = useLevelingStore(state => state.setCurrentSteps);
 
-
     useEffect(() => {
+        function checkSkipAhead(event: EnteredClientEvent) {
+            const { sections, section, step } = useLevelingStore.getState();
+            let firstSectionIndex = -1;
+            let firstStepIndex = -1;
+
+            for (const sectionIndex in sections) {
+                const section = sections[sectionIndex];
+                
+                for (const stepIndex in section.steps) {
+                    const step = section.steps[stepIndex];
+
+                    if (step.type !== "fragment_step") {
+                        continue;
+                    }
+
+                    // todo: possibly check subSteps
+
+                    const enterStepLocation = (step as RouteData.FragmentStep).parts[1] as Fragments.EnterFragment;
+                    const type = enterStepLocation?.type ?? "";
+
+                    if (type !== "enter" || enterStepLocation.areaId !== event.locationId) {
+                        continue;
+                    }
+
+                    firstStepIndex = +stepIndex;
+                    break;
+                }
+
+                if (firstStepIndex === -1) {
+                    continue;
+                }
+
+                firstSectionIndex = +sectionIndex;
+                break;
+            }
+
+            if (firstSectionIndex === -1) {
+                return;
+            }
+
+            if (firstSectionIndex < section || firstStepIndex < step) {
+                return;
+            }
+
+            firstStepIndex++;
+
+            if (firstStepIndex === sections[firstSectionIndex].steps.length) {
+                firstStepIndex = 0;
+                firstSectionIndex++;
+            }
+
+            if (firstSectionIndex >= sections.length) {
+                // we are probably done
+                return;
+            }
+
+            const { setStep, setSection, setCurrentSteps } = useLevelingStore.getState();
+
+            setSection(firstSectionIndex);
+            setStep(firstStepIndex);
+            setCurrentSteps(getSteps(getCurrentSection(), firstStepIndex));
+        }
+
         window.electron.on("poe-client-event", function (event, data: ClientEvent) {
             // parse event
             if (data.type !== ClientEventType.Entered) {
@@ -62,6 +124,7 @@ export function useExileLeveling() {
             const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId;
 
             if (enteredEvent.locationId !== nextLocation) {
+                checkSkipAhead(enteredEvent);
                 return;
             }
 
