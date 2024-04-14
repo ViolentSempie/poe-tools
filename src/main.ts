@@ -20,6 +20,8 @@ const createOverlay = () => {
         },
         ...OVERLAY_WINDOW_OPTS,
     });
+    browserWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+    browserWindow.setAlwaysOnTop(true, 'screen-saver', 1);
 
     function makeInteractive() {
         let isInteractive = false;
