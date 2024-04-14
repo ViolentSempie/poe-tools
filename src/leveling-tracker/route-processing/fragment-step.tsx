@@ -13,6 +13,7 @@ import { ArenaPart } from "./fragments/arena-part";
 import { QuestTextPart } from "./fragments/quest-text-part";
 import { DirectionPart } from "./fragments/direction-part";
 import { QuestPart } from "./fragments/quest-part";
+import { CraftingPart } from "./fragments/crafting-part";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
@@ -37,6 +38,7 @@ export function FragmentStep({ fragment }: RenderFragmentProps) {
                             waypoint_get: () => <WaypointGetPart />,
                             waypoint_use: () => <WaypointUsePart part={part as Fragments.WaypointUseFragment} />,
                             dir: () => <DirectionPart part={part as Fragments.DirectionFragment} />,
+                            crafting: () => <CraftingPart part={part as Fragments.CraftingFragment} />,
                             _: () => <div>Unknown type {part.type}</div>,
                         })}
                     </div>
