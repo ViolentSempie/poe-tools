@@ -10,7 +10,7 @@ export function CraftingPart({ part }: CraftingPartProps) {
     return (
         <div className="font-medium text-white-600 pl-2">
             <FontAwesomeIcon icon={faHammer} className="pr-1" />
-            Crafting: {part.crafting_recipes.join(", ")}
+            {part.crafting_recipes.join(", ")}
         </div>
     );
 }
