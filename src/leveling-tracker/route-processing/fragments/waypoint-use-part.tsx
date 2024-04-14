@@ -12,14 +12,15 @@ export function WaypointUsePart({ part }: WaypointUsePartProps) {
 
     return (
         <div className="flex flex-row min-w-0 flex-1 space-x-1 pt-0.5">
-            <p className="text-gray-100">
-                Use
-                <p className="text-blue-600">
-                    <FontAwesomeIcon icon={faGlobe} /> waypoint
-                </p>
+            <p className="text-blue-600">
+                <FontAwesomeIcon icon={faGlobe} /> waypoint
+            </p>
+
+            <p>
                 <FontAwesomeIcon icon={faArrowRight} />
             </p>
-            <p className="font-medium text-blue-600">
+
+            <p className="font-medium text-yellow-600">
                 {town.name}
             </p>
         </div>
