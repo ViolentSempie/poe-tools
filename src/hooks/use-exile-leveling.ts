@@ -60,9 +60,12 @@ export function useExileLeveling() {
                     // todo: possibly check subSteps
 
                     const enterStepLocation = (step as RouteData.FragmentStep).parts[1] as Fragments.EnterFragment;
-                    const type = enterStepLocation?.type ?? "";
+                    const waypointStepLocation = (step as RouteData.FragmentStep).parts[0] as Fragments.WaypointUseFragment;
+                    const logoutStepLocation = (step as RouteData.FragmentStep).parts[0] as Fragments.LogoutFragment;
+                    const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId ?? logoutStepLocation.areaId ?? -1;
+                    const type = enterStepLocation?.type ?? waypointStepLocation.type ?? logoutStepLocation.type ?? "";
 
-                    if (type !== "enter" || enterStepLocation.areaId !== event.locationId) {
+                    if (type !== "enter" || nextLocation !== event.locationId) {
                         continue;
                     }
 
@@ -120,9 +123,10 @@ export function useExileLeveling() {
             const enteredEvent = data as EnteredClientEvent;
             const enterStepLocation = (enterStep as RouteData.FragmentStep).parts[1] as Fragments.EnterFragment;
             const waypointStepLocation = (enterStep as RouteData.FragmentStep).parts[0] as Fragments.WaypointUseFragment;
+            const logoutStepLocation = (enterStep as RouteData.FragmentStep).parts[0] as Fragments.LogoutFragment;
+            const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId ?? logoutStepLocation.areaId ?? -1;
 
-            const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId;
-
+            console.log(enterStep, nextLocation, enteredEvent);
             if (enteredEvent.locationId !== nextLocation) {
                 checkSkipAhead(enteredEvent);
                 return;

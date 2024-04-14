@@ -1,24 +1,22 @@
-import { RouteData } from "../types";
-import { Fragments } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-solid-svg-icons";
 import { getArea } from "@/utils/get-area";
+import { Fragments } from "./types";
 
-type KillFragmentProps = {
-    fragment: RouteData.FragmentStep;
+type KillPartProps = {
+    part: Fragments.EnterFragment;
 }
 
-export function EnterFragment({ fragment }: KillFragmentProps) {
-    const enterTarget = fragment.parts[1] as Fragments.EnterFragment;
-    const town = getArea(enterTarget.areaId);
+export function EnterPart({ part }: KillPartProps) {
+    const town = getArea(part.areaId);
 
     return (
-        <div className="relative flex space-x-3">
+        <div className="flex flex-row space-x-3">
             <div className="flex items-center w-6 justify-center">
                 <FontAwesomeIcon icon={faHouse} />
             </div>
 
-            <div className="flex flex-row min-w-0 flex-1 justify-between space-x-1 pt-0.5">
+            <div className="flex flex-row min-w-0 flex-1 space-x-1 pt-0.5">
                 <p className="text-gray-100">
                     Travel to
                 </p>

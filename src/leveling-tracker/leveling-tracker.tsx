@@ -8,23 +8,20 @@ export function Leveling() {
     const steps = useExileLeveling();
 
     return (
-        <div className="absolute left-[730px] bottom-[35px] rounded-md bg-slate-800 text-gray-100">
+        <div className="absolute right-[730px] bottom-[35px] rounded-md bg-slate-800 text-gray-100">
             <div className="flow-root mt-2 px-4">
-                <ul role="list" className="-mb-4">
+                <div className="flex flex-col gap-y-2">
                     {steps.map((step, index) => (
-                        <li key={index}>
-                            <div className="relative pb-4">
-                                {index !== steps.length - 1 ? (
-                                    <span className="absolute left-[12px] top-[30px] -ml-px h-1/4 w-0.5 bg-gray-600" aria-hidden="true" />
-                                ) : null}
+                        <div key={index}>
+                            <div className="relative">
                                 {reduce(step.type, {
                                     fragment_step: () => <RenderFragment fragment={step as RouteData.FragmentStep} />,
                                     _: () => <div>Unknown step type</div>,
                                 })}
                             </div>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </div>
 
             <Divider className="mt-2" />

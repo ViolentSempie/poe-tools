@@ -1,40 +1,47 @@
 import { reduce } from "@/utils/reduce";
 import { RouteData } from "./types";
-import { KillFragment } from "./fragments/kill-fragment";
-import { EnterFragment } from "./fragments/enter-fragment";
-import { WaypointUseFragment } from "./fragments/waypoint-use-fragment";
-import { TrialFragment } from "./fragments/trial-fragment";
-import { LogoutFragment } from "./fragments/logout-fragment";
+import { TrialPart } from "./fragments/trial-part";
+import { WaypointGetPart } from "./fragments/waypoint-get-part";
+import { EnterPart } from "./fragments/enter-part";
+import { Fragments } from "./fragments/types";
+import { KillPart } from "./fragments/kill-part";
+import { LogoutPart } from "./fragments/logout-part";
+import { StringPart } from "./fragments/string-part";
+import { WaypointUsePart } from "./fragments/waypoint-use-part";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
 }
 
+const SKIP_PARTS = ["➞ ", "Get "];
+
 export function RenderFragment({ fragment }: RenderFragmentProps) {
-    if (fragment.parts.length === 1) {
-        if (typeof fragment.parts[0] === "string") {
-            return <div>{fragment.parts[0] as string}</div>;
-        }
-
-        const { type } = fragment.parts[0];
-
-        return reduce(type, {
-                waypoint_use: () => <WaypointUseFragment fragment={fragment} />,
-                logout: () => <LogoutFragment fragment={fragment} />,
-                _: () => <div>Unknown type {type}</div>, 
-                // waypoint_get: () => <WaypointGetFragment fragment={fragment} />,
-        });
-    }
-    if (fragment.parts.length === 1 || typeof fragment.parts[1] === "string") {
-        return <div>{fragment.parts[0] as string}</div>;
-    }
+    const renderParts = fragment.parts.filter((part) => !SKIP_PARTS.includes(part as string));
 
     return (
-        <div className="relative flex space-x-3">
-            {reduce(fragment.parts[1].type, {
+        <div className="flex flex-col">
+            {renderParts.map((part, index) => (
+                <div key={index}>
+                    {typeof part === "string" && <StringPart part={part} />}
+                    {typeof part !== "string" && reduce(part.type, {
+                        kill: () => <KillPart part={part as Fragments.KillFragment} />,
+                        enter: () => <EnterPart part={part as Fragments.EnterFragment} />,
+                        trial: () => <TrialPart />,
+                        logout: () => <LogoutPart part={part as Fragments.LogoutFragment} />,
+                        waypoint_get: () => <WaypointGetPart />,
+                        waypoint_use: () => <WaypointUsePart part={part as Fragments.WaypointUseFragment} />,
+                        _: () => <div>Unknown type {part.type}</div>,
+                    })}
+                </div>
+            ))}
+            {fragment.subSteps.map((subStep, index) => (
+                <RenderFragment key={index} fragment={subStep} />
+            ))}
+            {/* {reduce(fragment.parts[1].type, {
                 kill: () => <KillFragment fragment={fragment} />,
                 enter: () => <EnterFragment fragment={fragment} />,
-                trial: () => <TrialFragment fragment={fragment} />,
+                trial: () => <TrialFragment />,
+                waypoint_get: () => <WaypointGetFragment />,
                 // arena: () => <ArenaFragment fragment={fragment} />,
                 // logout: () => <LogoutFragment fragment={fragment} />,
                 // enter: () => <EnterFragment fragment={fragment} />,
@@ -54,7 +61,7 @@ export function RenderFragment({ fragment }: RenderFragmentProps) {
                 // direction: () => <DirectionFragment fragment={fragment} />,
                 // copy: () => <CopyFragment fragment={fragment} />,
                 _: () => <div>{fragment.parts[0] as string}</div>,
-            })}
+            })} */}
         </div>
     );
 }

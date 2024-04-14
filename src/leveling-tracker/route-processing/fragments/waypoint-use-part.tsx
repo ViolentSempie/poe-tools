@@ -1,16 +1,14 @@
-import { RouteData } from "../types";
 import { Fragments } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { getArea } from "@/utils/get-area";
 
-type WaypointUseFragmentProps = {
-    fragment: RouteData.FragmentStep;
+type WaypointUsePartProps = {
+    part: Fragments.WaypointUseFragment;
 }
 
-export function WaypointUseFragment({ fragment }: WaypointUseFragmentProps) {
-    const data = fragment.parts[0] as Fragments.WaypointUseFragment;
-    const town = getArea(data.dstAreaId);
+export function WaypointUsePart({ part }: WaypointUsePartProps) {
+    const town = getArea(part.dstAreaId);
 
     return (
         <div className="relative flex space-x-3">
@@ -18,7 +16,7 @@ export function WaypointUseFragment({ fragment }: WaypointUseFragmentProps) {
                     <FontAwesomeIcon icon={faGlobe} />
             </div>
 
-            <div className="flex flex-row min-w-0 flex-1 justify-between space-x-1 pt-0.5">
+            <div className="flex flex-row min-w-0 flex-1 space-x-1 pt-0.5">
                 <p className="text-gray-100">
                     Use waypoint <FontAwesomeIcon icon={faArrowRight} />
                 </p>
