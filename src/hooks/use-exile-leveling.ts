@@ -1,73 +1,9 @@
 import { Fragments } from "@/leveling-tracker/route-processing/fragments/types";
-import { RouteData } from "@/leveling-tracker/route-processing/types";
 import { ClientEvent, ClientEventType } from "@/poe-events/types/client-event";
 import { EnteredClientEvent } from "@/poe-events/types/entered-client-event";
 import { useLevelingStore } from "@/stores/leveling";
+import { getPart } from "@/utils/get-part";
 import { useEffect } from "react";
-
-const ENTER_STEPS = [
-    "enter",
-    "waypoint_use",
-    "logout",
-];
-
-function getSteps(section: number, currentStep: number): RouteData.Step[] {
-    // Go through the currentSection.steps and return all the steps until we find a section.parts[1].type === "enter"
-    const currentSection = getSection(section);
-    const steps = [];
-    let index = currentStep;
-
-    for (index; currentStep < currentSection.steps.length; index++) {
-        const step = currentSection.steps[index];
-        steps.push(step);
-
-        if (step.type === "gem_step") {
-            continue;
-        }
-
-        const findEnterPart = step.parts.find(part => typeof part !== "string" && ENTER_STEPS.includes(part.type));
-
-        if (findEnterPart) {
-            break;
-        }
-    }
-
-    if (index >= currentSection.steps.length) {
-        return [
-            ...steps,
-            ...getSteps(section + 1, 0),
-        ];
-    }
-
-    return steps;
-}
-
-function getSection(section: number | null = null) {
-    const sections = useLevelingStore.getState().sections;
-    section ??= useLevelingStore.getState().section;
-
-    return sections[section];
-}
-
-function getPart(step: RouteData.FragmentStep | RouteData.GemStep, type: string): Fragments.AnyFragment | null {
-    if (step.type !== "fragment_step") {
-        return null;
-    }
-
-    for (const part of step.parts) {
-        if (typeof part === "string") {
-            continue;
-        }
-
-        if (part.type !== type) {
-            continue;
-        }
-
-        return part;
-    }
-
-    return null;
-}
 
 export function useExileLeveling() {
     const data = useLevelingStore(state => state.currentSteps);
@@ -80,7 +16,7 @@ export function useExileLeveling() {
                 return;
             }
 
-            const { section, step, setStep, currentSteps, setCurrentSteps } = useLevelingStore.getState();
+            const { getSection, step, setStep, currentSteps } = useLevelingStore.getState();
             const currentSection = getSection();
 
             const enterStep = currentSteps[currentSteps.length - 1];
@@ -98,17 +34,15 @@ export function useExileLeveling() {
 
             if (nextStep >= currentSection.steps.length) {
                 useLevelingStore.getState().nextSection();
-                setCurrentSteps(getSteps(section, 1));
                 return;
             }
 
             setStep(nextStep);
-            setCurrentSteps(getSteps(section, nextStep));
         });
 
         // Initialize
-        const step = useLevelingStore.getState().step;
-        setData(getSteps(useLevelingStore.getState().section, step));
+        const { step, section, getSteps } = useLevelingStore.getState();
+        setData(getSteps(section, step));
     }, []);
 
     return data;

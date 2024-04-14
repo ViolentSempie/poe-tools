@@ -4,9 +4,12 @@ import { reduce } from "@/utils/reduce";
 import Divider from "@/components/divider";
 import { useExileLeveling } from "@/hooks/use-exile-leveling";
 import { GemStep } from "./route-processing/gem-step";
+import { useLevelingStore } from "@/stores/leveling";
 
 export function Leveling() {
     const steps = useExileLeveling();
+    const nextStep = useLevelingStore((state) => state.nextStep);
+    const previousStep = useLevelingStore((state) => state.previousStep);
 
     return (
         <div className="absolute right-[730px] bottom-[35px] rounded-md bg-slate-800 text-gray-100 opacity-90">
@@ -29,8 +32,8 @@ export function Leveling() {
             <Divider className="mt-2" />
 
             <div className="flex flex-row flex-grow">
-                <button className="text-gray-100 bg-slate-800 hover:bg-slate-600 px-2 py-1 rounded-bl-md basis-1/2">Previous</button>
-                <button className="text-gray-100 bg-slate-800 hover:bg-slate-600 px-2 py-1 rounded-br-md basis-1/2">Next</button>
+                <button onClick={previousStep} className="text-gray-100 bg-slate-800 hover:bg-slate-600 px-2 py-1 rounded-bl-md basis-1/2">Previous</button>
+                <button onClick={nextStep} className="text-gray-100 bg-slate-800 hover:bg-slate-600 px-2 py-1 rounded-br-md basis-1/2">Next</button>
             </div>
         </div>
     );
