@@ -46,7 +46,7 @@ export const useLevelingStore = create<LevelingStore>()(
                     const steps = [];
                     let index = currentStep;
                 
-                    for (index; currentStep < currentSection.steps.length; index++) {
+                    for (index; index < currentSection.steps.length; index++) {
                         const step = currentSection.steps[index];
                         steps.push(step);
                 
