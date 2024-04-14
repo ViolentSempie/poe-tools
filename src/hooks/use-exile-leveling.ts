@@ -92,7 +92,6 @@ export function useExileLeveling() {
             const logoutStepLocation = getPart(enterStep, "logout") as Fragments.LogoutFragment;
             const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId ?? logoutStepLocation.areaId ?? -1;
 
-            console.log(enteredEvent, enterStep);
             if (enteredEvent.locationId !== nextLocation) {
                 return;
             }
