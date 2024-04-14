@@ -49,6 +49,26 @@ function getSection(section: number | null = null) {
     return sections[section];
 }
 
+function getPart(step: RouteData.FragmentStep | RouteData.GemStep, type: string): Fragments.AnyFragment | null {
+    if (step.type !== "fragment_step") {
+        return null;
+    }
+
+    for (const part of step.parts) {
+        if (typeof part === "string") {
+            continue;
+        }
+
+        if (part.type !== type) {
+            continue;
+        }
+
+        return part;
+    }
+
+    return null;
+}
+
 export function useExileLeveling() {
     const data = useLevelingStore(state => state.currentSteps);
     const setData = useLevelingStore(state => state.setCurrentSteps);
@@ -67,11 +87,12 @@ export function useExileLeveling() {
             const nextStep = step + currentSteps.length;
 
             const enteredEvent = data as EnteredClientEvent;
-            const enterStepLocation = (enterStep as RouteData.FragmentStep).parts[1] as Fragments.EnterFragment;
-            const waypointStepLocation = (enterStep as RouteData.FragmentStep).parts[0] as Fragments.WaypointUseFragment;
-            const logoutStepLocation = (enterStep as RouteData.FragmentStep).parts[0] as Fragments.LogoutFragment;
+            const enterStepLocation = getPart(enterStep, "enter") as Fragments.EnterFragment;
+            const waypointStepLocation = getPart(enterStep, "waypoint_use") as Fragments.WaypointUseFragment;
+            const logoutStepLocation = getPart(enterStep, "logout") as Fragments.LogoutFragment;
             const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation.dstAreaId ?? logoutStepLocation.areaId ?? -1;
 
+            console.log(enteredEvent, enterStep);
             if (enteredEvent.locationId !== nextLocation) {
                 return;
             }
