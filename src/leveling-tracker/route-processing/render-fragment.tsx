@@ -3,6 +3,8 @@ import { RouteData } from "./types";
 import { KillFragment } from "./fragments/kill-fragment";
 import { EnterFragment } from "./fragments/enter-fragment";
 import { WaypointUseFragment } from "./fragments/waypoint-use-fragment";
+import { TrialFragment } from "./fragments/trial-fragment";
+import { LogoutFragment } from "./fragments/logout-fragment";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
@@ -14,9 +16,12 @@ export function RenderFragment({ fragment }: RenderFragmentProps) {
             return <div>{fragment.parts[0] as string}</div>;
         }
 
-        return reduce(fragment.parts[0].type, {
+        const { type } = fragment.parts[0];
+
+        return reduce(type, {
                 waypoint_use: () => <WaypointUseFragment fragment={fragment} />,
-                _: () => <div>Unknown type</div>, 
+                logout: () => <LogoutFragment fragment={fragment} />,
+                _: () => <div>Unknown type {type}</div>, 
                 // waypoint_get: () => <WaypointGetFragment fragment={fragment} />,
         });
     }
@@ -29,6 +34,7 @@ export function RenderFragment({ fragment }: RenderFragmentProps) {
             {reduce(fragment.parts[1].type, {
                 kill: () => <KillFragment fragment={fragment} />,
                 enter: () => <EnterFragment fragment={fragment} />,
+                trial: () => <TrialFragment fragment={fragment} />,
                 // arena: () => <ArenaFragment fragment={fragment} />,
                 // logout: () => <LogoutFragment fragment={fragment} />,
                 // enter: () => <EnterFragment fragment={fragment} />,
@@ -42,7 +48,7 @@ export function RenderFragment({ fragment }: RenderFragmentProps) {
                 // generic: () => <GenericFragment fragment={fragment} />,
                 // reward_quest: () => <RewardQuestFragment fragment={fragment} />,
                 // reward_vendor: () => <RewardVendorFragment fragment={fragment} />,
-                // trial: () => <TrialFragment fragment={fragment} />,
+                
                 // ascend: () => <AscendFragment fragment={fragment} />,
                 // crafting: () => <CraftingFragment fragment={fragment} />,
                 // direction: () => <DirectionFragment fragment={fragment} />,
