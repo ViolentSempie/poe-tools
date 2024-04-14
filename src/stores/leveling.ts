@@ -75,20 +75,45 @@ export const useLevelingStore = create<LevelingStore>()(
                 nextSection: () => set({
                     section: get().section + 1,
                     step: 1,
-                    currentSteps: get().getSteps(get().section, 1),
+                    currentSteps: get().getSteps(get().section + 1, 1),
                 }),
                 setStep: (step: number) => {
                     set({ step, currentSteps: get().getSteps(get().section, step) });
                 },
                 nextStep: () => {
                     get().setStep(get().step + get().currentSteps.length);
+
+                    if (get().step < get().getSection().steps.length) {
+                        return;
+                    }
+
+                    get().nextSection();
                 },
                 previousStep: () => {
                     // find the previous enter step and set the step to the step above it
                     const currentSection = get().getSection();
                     let stepIndex = get().step - 1;
 
-                    while (stepIndex > 0) {
+                    if (stepIndex <= 0 && get().section !== 0) {
+                        const previousSection = get().sections[get().section - 1];
+                        stepIndex = previousSection.steps.length - 1;
+
+                        const step = previousSection.steps[stepIndex];
+
+                        set({
+                            section: get().section - 1,
+                            step: stepIndex,
+                            currentSteps: get().getSteps(get().section - 1, stepIndex),
+                        });
+
+                        if (step.type !== "fragment_step" || getEnterStep(step).length === 0) {
+                            get().previousStep();
+                        }
+
+                        return;
+                    }
+
+                    while (stepIndex > 0 && stepIndex < currentSection.steps.length) {
                         const step = currentSection.steps[--stepIndex];
                         const enterStep = typeof step !== "string" && step.type === "fragment_step" && getEnterStep(step).length !== 0;
 

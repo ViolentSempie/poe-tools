@@ -3,17 +3,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { getArea } from "@/utils/get-area";
 
-type WaypointUsePartProps = {
-    part: Fragments.WaypointUseFragment;
+type PortalUsePartProps = {
+    part: Fragments.PortalUseFragment;
 }
 
-export function WaypointUsePart({ part }: WaypointUsePartProps) {
+export function PortalUsePart({ part }: PortalUsePartProps) {
     const town = getArea(part.dstAreaId);
 
     return (
         <div className="flex flex-row min-w-0 flex-1 space-x-1 pt-0.5 pl-1">
             <p className="text-blue-600">
-                <FontAwesomeIcon icon={faGlobe} /> waypoint
+                <FontAwesomeIcon icon={faGlobe} /> portal
             </p>
 
             <p>

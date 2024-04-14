@@ -14,6 +14,10 @@ import { QuestTextPart } from "./fragments/quest-text-part";
 import { DirectionPart } from "./fragments/direction-part";
 import { QuestPart } from "./fragments/quest-part";
 import { CraftingPart } from "./fragments/crafting-part";
+import { GenericPart } from "./fragments/generic-part";
+import { PortalUsePart } from "./fragments/portal-use-part";
+import { PortalSetPart } from "./fragments/portal-set-part";
+import { AreaPart } from "./fragments/area-part";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
@@ -39,6 +43,10 @@ export function FragmentStep({ fragment }: RenderFragmentProps) {
                             waypoint_use: () => <WaypointUsePart part={part as Fragments.WaypointUseFragment} />,
                             dir: () => <DirectionPart part={part as Fragments.DirectionFragment} />,
                             crafting: () => <CraftingPart part={part as Fragments.CraftingFragment} />,
+                            generic: () => <GenericPart part={part as Fragments.GenericFragment} />,
+                            portal_use: () => <PortalUsePart part={part as Fragments.PortalUseFragment} />,
+                            portal_set: () => <PortalSetPart part={part as Fragments.PortalSetFragment} />,
+                            area: () => <AreaPart part={part as Fragments.AreaFragment} />,
                             _: () => <div>Unknown type {part.type}</div>,
                         })}
                     </div>

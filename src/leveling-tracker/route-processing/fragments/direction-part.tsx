@@ -11,6 +11,7 @@ export function DirectionPart({ part }: DirectionPartProps) {
     return (
         <p className="font-medium pl-2">
             {reduce(part.dirIndex, {
+                0: () => <FontAwesomeIcon icon={faArrowUp} />,
                 1: () => <FontAwesomeIcon icon={faArrowUp} transform={{ rotate: 45 }} />,
                 2: () => <FontAwesomeIcon icon={faArrowRight} />,
                 3: () => <FontAwesomeIcon icon={faArrowRight} transform={{ rotate: 45 }} />,

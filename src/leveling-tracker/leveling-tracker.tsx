@@ -10,9 +10,13 @@ export function Leveling() {
     const steps = useExileLeveling();
     const nextStep = useLevelingStore((state) => state.nextStep);
     const previousStep = useLevelingStore((state) => state.previousStep);
+    const section = useLevelingStore((state) => state.section);
 
     return (
         <div className="absolute translate-x-1/2 right-1/2 bottom-[38px] rounded-md bg-slate-800 text-gray-100 opacity-90">
+            <p className="text-gray-100 pl-1">Act {section + 1}</p>
+            <Divider className="mt-2" />
+
             <div className="flow-root mt-2 px-4">
                 <div className="flex flex-col gap-y-2">
                     {steps.map((step, index) => (
