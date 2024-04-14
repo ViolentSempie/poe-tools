@@ -1,6 +1,7 @@
 import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExileLevelingString } from './exile-leveling-string';
+import { ExileLevelingReset } from './exile-leveling-reset';
 
 type SettingsModalProps = {
     open: boolean;
@@ -44,6 +45,9 @@ export default function SettingsModal({ open, setOpen }: SettingsModalProps) {
                                         </Dialog.Title>
                                         <div className="mt-2">
                                             <ExileLevelingString />
+                                        </div>
+                                        <div className="mt-2">
+                                            <ExileLevelingReset />
                                         </div>
                                     </div>
                                 </div>

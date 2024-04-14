@@ -27,7 +27,7 @@ export function Leveling() {
 
             <Divider className="mt-2" />
 
-            <div className="flow-root mt-2 px-4">
+            <div className="flow-root mt-4 px-4">
                 <div className="flex flex-col gap-y-2">
                     {steps.map((step, index) => (
                         <div key={index}>
