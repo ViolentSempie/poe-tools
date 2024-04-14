@@ -8,6 +8,7 @@ import { KillPart } from "./fragments/kill-part";
 import { LogoutPart } from "./fragments/logout-part";
 import { StringPart } from "./fragments/string-part";
 import { WaypointUsePart } from "./fragments/waypoint-use-part";
+import { WaypointPart } from "./fragments/waypoint-part";
 
 type RenderFragmentProps = {
     fragment: RouteData.FragmentStep;
@@ -28,6 +29,7 @@ export function RenderFragment({ fragment }: RenderFragmentProps) {
                         enter: () => <EnterPart part={part as Fragments.EnterFragment} />,
                         trial: () => <TrialPart />,
                         logout: () => <LogoutPart part={part as Fragments.LogoutFragment} />,
+                        waypoint: () => <WaypointPart />,
                         waypoint_get: () => <WaypointGetPart />,
                         waypoint_use: () => <WaypointUsePart part={part as Fragments.WaypointUseFragment} />,
                         _: () => <div>Unknown type {part.type}</div>,

@@ -20,7 +20,7 @@ export function WaypointUsePart({ part }: WaypointUsePartProps) {
                 <p className="text-gray-100">
                     Use waypoint <FontAwesomeIcon icon={faArrowRight} />
                 </p>
-                <p className="font-medium text-orange-600">
+                <p className="font-medium text-blue-600">
                     {town.name}
                 </p>
             </div>

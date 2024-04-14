@@ -12,7 +12,7 @@ export function WaypointGetPart() {
                 <p className="text-gray-100">
                     Get
                 </p>
-                <p className="font-medium text-orange-600">
+                <p className="font-medium text-blue-600">
                     waypoint
                 </p>
             </div>
