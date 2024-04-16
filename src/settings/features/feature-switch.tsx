@@ -1,22 +1,28 @@
 import { Switch } from '@headlessui/react';
 import { classNames } from '@/utils/classnames';
-import { useFeatureStore } from '@/stores/features';
+import { FeatureStore, useFeatureStore } from '@/stores/features';
 
-export default function ExileLevelingEnabled() {
-    const enabled = useFeatureStore((state) => state.features.exileLeveling.enabled);
+type FeatureSwitchProps = {
+    featureId: keyof FeatureStore['features'];
+};
+
+export default function FeatureSwitch({ featureId }: FeatureSwitchProps) {
+    const feature = useFeatureStore((state) => state.features[featureId]);
     const setEnabled = useFeatureStore((state) => state.setFeature);
+
+    const { name, enabled } = feature;
 
     return (
         <Switch.Group as="div" className="flex items-center">
             <Switch
                 checked={enabled}
-                onChange={(enabled) => setEnabled('exileLeveling', enabled)}
+                onChange={(enabled) => setEnabled(featureId, enabled)}
                 className={classNames(
                     enabled ? 'bg-violet-600' : 'bg-slate-600',
                     'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2'
                 )}
             >
-                <span className="sr-only">Enable exile leveling</span>
+                <span className="sr-only">{name}</span>
                 <span
                     className={classNames(
                         enabled ? 'translate-x-5' : 'translate-x-0',
@@ -55,7 +61,7 @@ export default function ExileLevelingEnabled() {
             </Switch>
 
             <Switch.Label as="span" className="ml-3 text-sm">
-                <span className="font-medium text-slate-100">Enable exile leveling</span>
+                <span className="font-medium text-slate-100">Enable {name}</span>
             </Switch.Label>
         </Switch.Group>
     );

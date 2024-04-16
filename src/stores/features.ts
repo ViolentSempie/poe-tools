@@ -2,14 +2,15 @@ import { Tab } from "@/settings/settings-modal";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-type Feature = {
+export type Feature = {
     name: string;
     enabled: boolean;
 };
 
-type FeatureStore = {
+export type FeatureStore = {
     features: {
         exileLeveling: Feature;
+        hotkeyHelperText: Feature;
     },
     getTabs: () => Tab[];
     enableFeature: (feature: keyof FeatureStore["features"]) => void;
@@ -23,8 +24,12 @@ export const useFeatureStore = create<FeatureStore>()(
             (set, get) => ({
                 features: {
                     exileLeveling: {
-                        name: "Exile Leveling",
+                        name: "exile leveling",
                         enabled: false,
+                    },
+                    hotkeyHelperText: {
+                        name: "hotkey helper text",
+                        enabled: true,
                     },
                 },
                 getTabs() {
@@ -75,7 +80,7 @@ export const useFeatureStore = create<FeatureStore>()(
                 },
             }),
             {
-                name: "feature-store",
+                name: "feature-store.v2",
             }
         )
     )
