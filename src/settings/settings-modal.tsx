@@ -1,7 +1,9 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { ExileLevelingString } from './exile-leveling-string';
 import { ExileLevelingReset } from './exile-leveling-reset';
+import ExileLevelingEnabled from './exile-leveling-enabled';
+import { useLevelingStore } from '@/stores/leveling';
 
 type SettingsModalProps = {
     open: boolean;
@@ -10,6 +12,7 @@ type SettingsModalProps = {
 
 export default function SettingsModal({ open, setOpen }: SettingsModalProps) {
     const cancelButtonRef = useRef(null);
+    const exileLevelingEnabled = useLevelingStore((state) => state.enabled);
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -44,11 +47,18 @@ export default function SettingsModal({ open, setOpen }: SettingsModalProps) {
                                             Leveling tool
                                         </Dialog.Title>
                                         <div className="mt-2">
-                                            <ExileLevelingString />
+                                            <ExileLevelingEnabled />
                                         </div>
-                                        <div className="mt-2">
-                                            <ExileLevelingReset />
-                                        </div>
+                                        {exileLevelingEnabled && (
+                                            <>
+                                                <div className="mt-2">
+                                                    <ExileLevelingString />
+                                                </div>
+                                                <div className="mt-2">
+                                                    <ExileLevelingReset />
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">

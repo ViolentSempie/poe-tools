@@ -3,14 +3,14 @@ import { useLevelingStore } from "./stores/leveling";
 import { Leveling } from "./leveling-tracker/leveling-tracker";
 
 export default function RootLayout() {
-  const sections = useLevelingStore((state) => state.sections);
+  const exileLevelingEnabled = useLevelingStore((state) => state.enabled);
 
   return (
     <div className={`absolute w-full h-full bg-transparent`}>
       <main className="absolute w-full h-full bg-transparent">
         <Settings />
 
-        {sections.length && <Leveling />}
+        {exileLevelingEnabled && <Leveling />}
       </main>
     </div>
   );

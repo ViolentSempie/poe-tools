@@ -6,10 +6,16 @@ import { useEffect } from "react";
 import { getArea } from '@/utils/get-area';
 
 export function useExileLeveling() {
-    const data = useLevelingStore(state => state.currentSteps);
-    const setData = useLevelingStore(state => state.setCurrentSteps);
+    const enabled = useLevelingStore(state => state.enabled);
+    const stepData = useLevelingStore(state => state.currentSteps);
+    const setStepData = useLevelingStore(state => state.setCurrentSteps);
 
     useEffect(() => {
+        if (!enabled) {
+            window.electron.removeAllListeners("poe-client-area-entered");
+            return;
+        }
+
         window.electron.on("poe-client-area-entered", function (event, data: AreaEnteredEvent) {
             const { getSection, step, setStep, currentSteps } = useLevelingStore.getState();
             const currentSection = getSection();
@@ -35,10 +41,18 @@ export function useExileLeveling() {
             setStep(nextStep);
         });
 
-        // Initialize
-        const { step, section, getSteps } = useLevelingStore.getState();
-        setData(getSteps(section, step));
+        return () => {
+            window.electron.removeAllListeners("poe-client-area-entered");
+        };
+    }, [enabled]);
+
+    useEffect(() => {
+        if (enabled) {
+            // Initialize
+            const { step, section, getSteps } = useLevelingStore.getState();
+            setStepData(getSteps(section, step));
+        }
     }, []);
 
-    return data;
+    return stepData;
 }
