@@ -1,19 +1,16 @@
 import { Switch } from '@headlessui/react';
-import { useLevelingStore } from '@/stores/leveling';
-
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '@/utils/classnames';
+import { useFeatureStore } from '@/stores/features';
 
 export default function ExileLevelingEnabled() {
-    const enabled = useLevelingStore((state) => state.enabled);
-    const setEnabled = useLevelingStore((state) => state.setEnabled);
+    const enabled = useFeatureStore((state) => state.features.exileLeveling.enabled);
+    const setEnabled = useFeatureStore((state) => state.setFeature);
 
     return (
         <Switch.Group as="div" className="flex items-center">
             <Switch
                 checked={enabled}
-                onChange={setEnabled}
+                onChange={(enabled) => setEnabled('exileLeveling', enabled)}
                 className={classNames(
                     enabled ? 'bg-violet-600' : 'bg-slate-600',
                     'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-violet-600 focus:ring-offset-2'

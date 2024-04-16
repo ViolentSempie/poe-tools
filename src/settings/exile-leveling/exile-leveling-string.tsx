@@ -21,7 +21,7 @@ export function ExileLevelingString() {
     };
 
     return (
-        <div>
+        <div className="flex flex-col flex-grow">
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-100">
                 Exile Leveling String
             </label>

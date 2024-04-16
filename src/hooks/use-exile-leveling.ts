@@ -4,9 +4,10 @@ import { useLevelingStore } from "@/stores/leveling";
 import { getPart } from "@/utils/get-part";
 import { useEffect } from "react";
 import { getArea } from '@/utils/get-area';
+import { useFeatureStore } from '@/stores/features';
 
 export function useExileLeveling() {
-    const enabled = useLevelingStore(state => state.enabled);
+    const enabled = useFeatureStore(state => state.features.exileLeveling.enabled);
     const stepData = useLevelingStore(state => state.currentSteps);
     const setStepData = useLevelingStore(state => state.setCurrentSteps);
 

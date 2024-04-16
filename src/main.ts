@@ -1,4 +1,3 @@
-import { ScreenshotManager } from "./screenshot/screenshot-manager";
 import { PoeEventManager } from "./poe-events/poe-event-manager";
 
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -6,11 +5,9 @@ const { app, BrowserWindow, globalShortcut } = require("electron");
 const path = require("path");
 const { OverlayController, OVERLAY_WINDOW_OPTS } = require("electron-overlay-window");
 
-const toggleMouseKey = "CmdOrCtrl + ;";
+const toggleMouseKey = "CmdOrCtrl + F";
 
 const createOverlay = () => {
-    const screenshotManager = new ScreenshotManager();
-
     const browserWindow = new BrowserWindow({
         width: 400,
         height: 300,
@@ -66,7 +63,6 @@ const createOverlay = () => {
     );
 
     new PoeEventManager(browserWindow);
-    // screenshotManager.start();
 };
 
 

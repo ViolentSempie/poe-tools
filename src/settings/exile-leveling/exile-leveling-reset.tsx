@@ -9,7 +9,7 @@ export function ExileLevelingReset() {
     return (
         <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-100">
-                Exile Leveling Reset
+                Reset
             </label>
 
             <div className="mt-2 flex flex-col">

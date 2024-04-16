@@ -10,7 +10,6 @@ const ENTER_STEPS = [
 ];
 
 type LevelingStore = {
-    enabled: boolean;
     sections: RouteData.Section[];
     section: number;
     step: number;
@@ -18,7 +17,6 @@ type LevelingStore = {
     lastUpdate: number;
     getSection: (section?: number) => RouteData.Section;
     getSteps: (section: number, currentStep: number) => RouteData.Step[];
-    setEnabled: (enabled: boolean) => void;
     setSections: (sections: RouteData.Section[]) => void;
     setSection: (section: number) => void;
     nextSection: () => void;
@@ -33,7 +31,6 @@ export const useLevelingStore = create<LevelingStore>()(
     devtools(
         persist(
             (set, get) => ({
-                enabled: false,
                 sections: [],
                 section: 0,
                 step: 0,
@@ -77,7 +74,6 @@ export const useLevelingStore = create<LevelingStore>()(
                 
                     return steps;
                 },
-                setEnabled: (enabled: boolean) => set({ enabled }),
                 setSections: (sections: RouteData.Section[]) => set({ sections }),
                 setSection: (section: number) => set({ section }),
                 nextSection: () => set({

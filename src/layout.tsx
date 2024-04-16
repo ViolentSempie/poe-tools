@@ -1,16 +1,16 @@
 import { Settings } from "./settings/settings";
-import { useLevelingStore } from "./stores/leveling";
 import { Leveling } from "./leveling-tracker/leveling-tracker";
+import { useFeatureStore } from "./stores/features";
 
 export default function RootLayout() {
-  const exileLevelingEnabled = useLevelingStore((state) => state.enabled);
+  const features = useFeatureStore((state) => state.features);
 
   return (
     <div className={`absolute w-full h-full bg-transparent`}>
       <main className="absolute w-full h-full bg-transparent">
         <Settings />
 
-        {exileLevelingEnabled && <Leveling />}
+        {features.exileLeveling.enabled && <Leveling />}
       </main>
     </div>
   );
