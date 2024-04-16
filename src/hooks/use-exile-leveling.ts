@@ -1,34 +1,36 @@
+import { AreaEnteredEvent } from 'poe-log-events/dist/events/AreaEnteredEvent';
 import { Fragments } from "@/leveling-tracker/route-processing/fragments/types";
-import { ClientEvent, ClientEventType } from "@/poe-events/types/client-event";
-import { EnteredClientEvent } from "@/poe-events/types/entered-client-event";
 import { useLevelingStore } from "@/stores/leveling";
 import { getPart } from "@/utils/get-part";
 import { useEffect } from "react";
+import { getArea } from '@/utils/get-area';
+import { useFeatureStore } from '@/stores/features';
 
 export function useExileLeveling() {
-    const data = useLevelingStore(state => state.currentSteps);
-    const setData = useLevelingStore(state => state.setCurrentSteps);
+    const enabled = useFeatureStore(state => state.features.exileLeveling.enabled);
+    const stepData = useLevelingStore(state => state.currentSteps);
+    const setStepData = useLevelingStore(state => state.setCurrentSteps);
 
     useEffect(() => {
-        window.electron.on("poe-client-event", function (event, data: ClientEvent) {
-            // parse event
-            if (data.type !== ClientEventType.Entered) {
-                return;
-            }
+        if (!enabled) {
+            window.electron.removeAllListeners("poe-client-area-entered");
+            return;
+        }
 
+        window.electron.on("poe-client-area-entered", function (event, data: AreaEnteredEvent) {
             const { getSection, step, setStep, currentSteps } = useLevelingStore.getState();
             const currentSection = getSection();
 
             const enterStep = currentSteps[currentSteps.length - 1];
             const nextStep = step + currentSteps.length;
 
-            const enteredEvent = data as EnteredClientEvent;
             const enterStepLocation = getPart(enterStep, "enter") as Fragments.EnterFragment;
             const waypointStepLocation = getPart(enterStep, "waypoint_use") as Fragments.WaypointUseFragment;
             const logoutStepLocation = getPart(enterStep, "logout") as Fragments.LogoutFragment;
             const nextLocation = enterStepLocation?.areaId ?? waypointStepLocation?.dstAreaId ?? logoutStepLocation?.areaId ?? -1;
+            const area = getArea(nextLocation);
 
-            if (enteredEvent.locationId !== nextLocation) {
+            if (area.name !== data.newArea) {
                 return;
             }
 
@@ -40,10 +42,18 @@ export function useExileLeveling() {
             setStep(nextStep);
         });
 
-        // Initialize
-        const { step, section, getSteps } = useLevelingStore.getState();
-        setData(getSteps(section, step));
+        return () => {
+            window.electron.removeAllListeners("poe-client-area-entered");
+        };
+    }, [enabled]);
+
+    useEffect(() => {
+        if (enabled) {
+            // Initialize
+            const { step, section, getSteps } = useLevelingStore.getState();
+            setStepData(getSteps(section, step));
+        }
     }, []);
 
-    return data;
+    return stepData;
 }
