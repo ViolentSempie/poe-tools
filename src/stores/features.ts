@@ -10,7 +10,7 @@ export type Feature = {
 export type FeatureStore = {
     features: {
         exileLeveling: Feature;
-        buildRandomizer: Feature;
+        buildRoulette: Feature;
         hotkeyHelperText: Feature;
     },
     getTabs: () => Tab[];
@@ -28,8 +28,8 @@ export const useFeatureStore = create<FeatureStore>()(
                         name: "exile leveling",
                         enabled: false,
                     },
-                    buildRandomizer: {
-                        name: "build randomizer",
+                    buildRoulette: {
+                        name: "build roulette",
                         enabled: false,
                     },
                     hotkeyHelperText: {
@@ -84,7 +84,7 @@ export const useFeatureStore = create<FeatureStore>()(
                 },
             }),
             {
-                name: "feature-store.v2",
+                name: "feature-store.v3",
             }
         )
     )

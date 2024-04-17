@@ -23,6 +23,7 @@ export class PassiveTree
     private _classes: Record<number, Node>;
     private _pathFinder: path.PathFinder<unknown> | null;
     private _imageCoordinates: Record<string, ImageCoordinate>;
+    private _loaded: boolean;
 
     /**
      * Creates an instance of PassiveTree.
@@ -37,6 +38,7 @@ export class PassiveTree
         this._classes = {};
         this._imageCoordinates = {};
         this._pathFinder = null;
+        this._loaded = false;
     }
 
     /**
@@ -74,6 +76,10 @@ export class PassiveTree
         return this._imageCoordinates;
     }
 
+    get isLoaded() {
+        return this._loaded;
+    }
+
     /**
      * Loads the passive skill tree data.
      */
@@ -84,6 +90,7 @@ export class PassiveTree
         console.log(data);
 
         this.processData(data);
+        this._loaded = true;
     }
 
     /**
@@ -206,7 +213,6 @@ export class PassiveTree
 
             for (const coord in imageData.coords) {
                 if (this._imageCoordinates[coord] !== undefined) {
-                    console.log("possible error?", this._imageCoordinates, coord);
                     continue;
                 }
 
