@@ -1,7 +1,8 @@
-import { getRandomElement, getShortestPath, shuffleArray } from "./utils";
+import { getRandomElement, getShortestPath } from "./utils";
 import { MAX_DISTANCE_BETWEEN_KEYSTONES, NUMBER_OF_KEYSTONES } from "./constants";
 import { PassiveTree } from "./passive-tree/passive-tree";
 import { Node } from "./passive-tree/types/passive-tree";
+import { shuffleArray } from "@/utils/shuffle-array";
 
 // https://www.poewiki.net/wiki/Special:CargoQuery?title=Special%3ACargoQuery&tables=skill_gems&fields=skill_gems._pageName,skill_gems.gem_tags,skill_gems.gem_description,skill_gems.primary_attribute,&where=skill_gems.is_vaal_skill_gem%3D"No"+AND+(skill_gems.gem_tags+HOLDS+LIKE+'%25attack%25'+OR+skill_gems.gem_tags+HOLDS+LIKE+'%25trap%25')%0D%0A&limit=500&format=json
 

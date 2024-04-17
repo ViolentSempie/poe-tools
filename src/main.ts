@@ -12,6 +12,7 @@ const createOverlay = () => {
         width: 400,
         height: 300,
         webPreferences: {
+            webSecurity: false,
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true
         },
