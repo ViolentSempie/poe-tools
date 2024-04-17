@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import SelectClass from './components/select-class';
 import { BuildRoulette } from './components/build-roulette';
+import { SkillGem } from './components/skill-gem';
 type SettingsModalProps = {
     open: boolean;
     setOpen: (open: boolean) => void;
@@ -27,9 +28,7 @@ export default function BuildRouletteModal({ open, setOpen }: SettingsModalProps
         if (!tree.isLoaded) {
             initialize();
         }
-
-        console.log(tree.isLoaded, tree.classes);
-    }, [tree.classes]);
+    }, []);
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -68,9 +67,9 @@ export default function BuildRouletteModal({ open, setOpen }: SettingsModalProps
 
                                 <div className="p-2 gap-y-2 flex flex-col">
                                     {!tree.isLoaded && <FontAwesomeIcon icon={faSpinner} spin />}
-                                    {tree.isLoaded && selectedSkillGem !== null && <div>Selected skill gem: {selectedSkillGem}</div>}
-                                    {tree.isLoaded && <SelectClass />}
-                                    {tree.isLoaded && <BuildRoulette />}
+                                    {tree.isLoaded && <SkillGem />}
+                                    {tree.isLoaded && selectedSkillGem !== null && <SelectClass />}
+                                    {tree.isLoaded && selectedSkillGem !== null && <BuildRoulette />}
                                 </div>
 
                                 <div>

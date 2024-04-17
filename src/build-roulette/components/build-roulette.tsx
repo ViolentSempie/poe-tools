@@ -1,11 +1,8 @@
-import Divider from "@/components/divider";
-import { GeneratedBuild, BuildGenerator } from "../generator/generator";
-import { CSSProperties, useEffect, useState } from "react";
-import { ImageCoordinate, PassiveTree } from "../generator/passive-tree/passive-tree";
+import React, { CSSProperties } from "react";
+import { ImageCoordinate } from "../generator/passive-tree/passive-tree";
 import { useRouletteStore } from "@/stores/roulette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDiceD20, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import React from "react";
 
 function IconImage({ coord }: {coord: ImageCoordinate}) {
     const style: CSSProperties = {

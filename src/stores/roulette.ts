@@ -6,9 +6,9 @@ import { devtools, persist } from "zustand/middleware";
 type BuildRouletteStore = {
     passiveTree: PassiveTree;
     build: GeneratedBuild | null;
-    selectedSkillGem: string | null;
+    selectedSkillGem: number | null;
     selectedClass: number;
-    setSelectedSkillGem: (skillGem: string) => void;
+    setSelectedSkillGem: (skillGem: number) => void;
     setSelectedClass: (classId: number) => void;
     initialize: () => void;
     buildGenerator: () => Promise<BuildGenerator>;

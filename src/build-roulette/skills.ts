@@ -12,6 +12,13 @@ interface ItemTypeWiki {
     "class id": string;
 }
 
+export type SkillGem = {
+    name: string;
+    description: string;
+    tags: string[];
+    primaryAttribute: string;
+};
+
 const bannedTags = [
     "Warcry",
     "Mark",
@@ -33,7 +40,7 @@ async function executeQuery<T>(table: string, fields: string[], where: string[])
     return (await (await fetch(url)).json()) as T[];
 }
 
-export async function getSkills() {
+export async function getSkills(): Promise<SkillGem[]> {
     const skillGems = await executeQuery<SkillTypeWiki>("skill_gems", [
         "skill_gems._pageTitle",
         "skill_gems.gem_tags",
@@ -77,5 +84,5 @@ export async function getSkills() {
             tags: skill["gem tags"],
             primaryAttribute: skill["primary attribute"],
         };
-    }).filter((x) => x);
+    }).filter((x) => x) as SkillGem[];
 }
