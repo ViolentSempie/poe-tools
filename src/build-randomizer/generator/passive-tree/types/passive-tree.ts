@@ -42,7 +42,7 @@ export type Node = {
     grantedIntelligence?: number;
     grantedPassivePoints?: number;
     expansionJewel: unknown;
-    flavourText?: string;
+    flavourText?: string[];
     classStartIndex?: number;
 }
 

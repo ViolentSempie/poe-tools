@@ -10,6 +10,7 @@ export type Feature = {
 export type FeatureStore = {
     features: {
         exileLeveling: Feature;
+        buildRandomizer: Feature;
         hotkeyHelperText: Feature;
     },
     getTabs: () => Tab[];
@@ -27,6 +28,10 @@ export const useFeatureStore = create<FeatureStore>()(
                         name: "exile leveling",
                         enabled: false,
                     },
+                    buildRandomizer: {
+                        name: "build randomizer",
+                        enabled: false,
+                    },
                     hotkeyHelperText: {
                         name: "hotkey helper text",
                         enabled: true,
@@ -35,7 +40,6 @@ export const useFeatureStore = create<FeatureStore>()(
                 getTabs() {
                     const features = get().features;
 
-                    console.log(features);
                     return Object.keys(features).map((feature) => ({
                         name: features[feature as keyof typeof features].name,
                         isActive: features[feature as keyof typeof features].enabled,
