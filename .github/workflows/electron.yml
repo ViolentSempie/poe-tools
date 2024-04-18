@@ -1,5 +1,7 @@
 # name of your github action
 name: PoE Tools Builder
+permissions:
+  contents: write
 on:
   push:
     tags:
