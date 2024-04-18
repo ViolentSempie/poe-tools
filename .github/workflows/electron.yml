@@ -2,8 +2,8 @@
 name: PoE Tools Builder
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 jobs:
   create_release:
     name: Create Release
@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           name: ${{ github.ref_name }}
           draft: false
@@ -63,4 +63,5 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: ${{ needs.create_release.outputs.tag-name }}
         files: ${{ matrix.release_file }}
