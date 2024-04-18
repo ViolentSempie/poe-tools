@@ -13,6 +13,8 @@ jobs:
       with:
         node-version: '21'
         check-latest: true
+        cache: 'yarn'
+    - run: yarn install --frozen-lockfile
     - run: yarn tsc --noEmit
     - run: yarn make
     - name: see directory
@@ -26,6 +28,8 @@ jobs:
       with:
         node-version: '21'
         check-latest: true
+        cache: 'yarn'
+    - run: yarn install --frozen-lockfile
     - run: yarn tsc --noEmit
     - run: yarn make
     - name: see directory
