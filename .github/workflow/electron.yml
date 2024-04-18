@@ -1,0 +1,32 @@
+# name of your github action
+name: PoE Tools Builder
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build_on_mac:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@master
+      with:
+        node-version: '21'
+        check-latest: true
+    - run: yarn tsc --noEmit
+    - run: yarn make
+    - name: see directory
+      run: ls
+  
+  build_on_win:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@master
+      with:
+        node-version: '21'
+        check-latest: true
+    - run: yarn tsc --noEmit
+    - run: yarn make
+    - name: see directory
+      run: ls
