@@ -37,7 +37,7 @@ jobs:
           # - os: ubuntu-latest
           #   release_file: "unknown"
           - os: windows-latest
-            release_file: "unknown"
+            release_file: "out/make/squirrel.windows/x64/*.exe"
           # - os: macos-latest
           #   release_file: "unknown"
     name: Build for Platform - ${{ matrix.architecture }} on ${{ matrix.os }}

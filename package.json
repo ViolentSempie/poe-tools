@@ -2,6 +2,7 @@
   "name": "poe-tools",
   "author": "ViolentSempie",
   "description": "Path of Exile Tools",
+  "license": "GPL-3.0-only",
   "version": "0.1.0",
   "private": true,
   "main": ".vite/build/main.js",
