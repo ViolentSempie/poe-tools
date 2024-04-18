@@ -61,6 +61,6 @@ jobs:
       if: matrix.os == 'macos-latest'
       run: echo "TODO"
     - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: ${{ matrix.release_file }}
