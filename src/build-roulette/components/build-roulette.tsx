@@ -2,7 +2,7 @@ import React, { CSSProperties } from "react";
 import { ImageCoordinate } from "../generator/passive-tree/passive-tree";
 import { useRouletteStore } from "@/stores/roulette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiceD20, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faClipboard, faDiceD20, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 function IconImage({ coord }: {coord: ImageCoordinate}) {
     const style: CSSProperties = {
@@ -19,6 +19,9 @@ export function BuildRoulette() {
     const tree = useRouletteStore((state) => state.passiveTree);
     const build = useRouletteStore((state) => state.build);
     const generateBuild = useRouletteStore((state) => state.generateBuild);
+    const copyExportString = async () => {
+        await navigator.clipboard.writeText(build?.exportString ?? "");
+    };
 
     if (!tree.isLoaded) {
         return <FontAwesomeIcon icon={faSpinner} spin />;
@@ -47,6 +50,27 @@ export function BuildRoulette() {
                     </React.Fragment>
                 );
             })}
+
+            {build && (
+                <div className="col-span-2 mt-2 flex rounded-md shadow-sm">
+                    <div className="relative flex flex-grow items-stretch focus-within:z-10">
+                        <input
+                            type="text"
+                            name="exile-string"
+                            id="exile-string"
+                            disabled
+                            className="block w-full rounded-none rounded-l-md border-0 py-1.5 pl-1.5 bg-slate-600 text-gray-50 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-violet-600 sm:text-sm sm:leading-6"
+                            value={build.exportString}
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-100 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                    >
+                        <FontAwesomeIcon icon={faClipboard} onClick={copyExportString} className="-ml-0.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                    </button>
+                </div>
+            )}
 
 
             <div className="flex col-span-2">

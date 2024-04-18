@@ -16,5 +16,5 @@ export function getShortestPath(targetNode: Node, tree: PassiveTree, selectedNod
         shortestPath = path;
     }
 
-    return shortestPath;
+    return shortestPath.reverse();
 }

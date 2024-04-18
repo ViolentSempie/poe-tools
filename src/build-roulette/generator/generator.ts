@@ -1,24 +1,28 @@
 import { getRandomElement, getShortestPath } from "./utils";
-import { MAX_DISTANCE_BETWEEN_KEYSTONES, NUMBER_OF_KEYSTONES } from "./constants";
+import { BANNED_COMBINATIONS, EXPORT_BASE, MAX_DISTANCE_BETWEEN_KEYSTONES, NUMBER_OF_KEYSTONES } from "./constants";
 import { PassiveTree } from "./passive-tree/passive-tree";
 import { Node } from "./passive-tree/types/passive-tree";
 import { shuffleArray } from "@/utils/shuffle-array";
-
-// https://www.poewiki.net/wiki/Special:CargoQuery?title=Special%3ACargoQuery&tables=skill_gems&fields=skill_gems._pageName,skill_gems.gem_tags,skill_gems.gem_description,skill_gems.primary_attribute,&where=skill_gems.is_vaal_skill_gem%3D"No"+AND+(skill_gems.gem_tags+HOLDS+LIKE+'%25attack%25'+OR+skill_gems.gem_tags+HOLDS+LIKE+'%25trap%25')%0D%0A&limit=500&format=json
+import URLSafeBase64 from 'urlsafe-base64';
+import { SkillGem } from "../skills";
 
 export interface GeneratedBuild {
     classNode: Node;
     keystones: Node[];
+    path: Node[];
     skillGem: unknown;
+    exportString: string;
 }
 
 export class BuildGenerator {
     private _tree: PassiveTree;
     private _selectedNodes: Node[] = [];
     private _selectedKeystones: Node[] = [];
+    private _gem: SkillGem;
 
-    public constructor(tree: PassiveTree) {
+    public constructor(tree: PassiveTree, gem: SkillGem) {
         this._tree = tree;
+        this._gem = gem;
     }
 
     /**
@@ -59,6 +63,8 @@ export class BuildGenerator {
             return {
                 classNode: classNode,
                 keystones: this._selectedKeystones,
+                path: this._selectedNodes,
+                exportString: this.exportBuildString(classNode),
                 skillGem: null,
             };
         }
@@ -77,7 +83,8 @@ export class BuildGenerator {
     pickKeystone() {
         const usedKeystones: Node[] = [];
         const keystones = shuffleArray(this._tree.keystones.filter(x => !usedKeystones.includes(x) && !this._selectedKeystones.includes(x))
-            .filter((x) => getShortestPath(x, this._tree, this._selectedNodes).length <= MAX_DISTANCE_BETWEEN_KEYSTONES));
+            .filter((x) => getShortestPath(x, this._tree, this._selectedNodes).length <= MAX_DISTANCE_BETWEEN_KEYSTONES))
+            .filter((x) => !this.isBanned(x));
 
         return [keystones[0], getShortestPath(keystones[0], this._tree, this._selectedNodes)[0]];
     }
@@ -92,12 +99,10 @@ export class BuildGenerator {
         const path = this._tree.findPath(from, to);
 
         for (const node of path) {
-            if (this._selectedNodes.map((x) => x.id).includes(from)) {
-                continue;
-            }
-
             this._selectedNodes.push(node);
         }
+
+        this._selectedNodes = this._selectedNodes.filter((item, index) => this._selectedNodes.indexOf(item) === index);
     }
 
     /**
@@ -118,5 +123,44 @@ export class BuildGenerator {
         } while (this._tree.classes[classId].classStartIndex === 0);
 
         return classId;
+    }
+
+    /**
+     * Checks if a keystone is banned based on the selected keystones.
+     * 
+     * @param keystone - The keystone to check.
+     * @returns True if the keystone is banned, false otherwise.
+     */
+    private isBanned(keystone: Node) {
+        const bannedList = BANNED_COMBINATIONS.filter(x => x.includes(keystone.name));
+
+        for (const bannedCombination of bannedList) {
+            let [a, b] = bannedCombination;
+
+            if (b === keystone.name) {
+                [a, b] = [b, a];
+            }
+
+            if (this._selectedKeystones.some((keystone) => keystone.name === b)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private exportBuildString(classNode: Node): string {
+        const className = this._tree.classes[classNode.classStartIndex!].name;
+        const nodes = this._selectedNodes.map(node => node.id).join(',');
+        const xml = EXPORT_BASE
+            .replace("{CLASS_NAME}", className)
+            .replace("{CLASS_ID}", classNode.classStartIndex!.toString())
+            .replace("{TREE_NODES}", nodes)
+            .replace("{GEM_ID}", this._gem.id)
+            .replace("{SKILL_ID}", this._gem.skillId)
+            .replace("{GEM_NAME}", this._gem.name)
+            .replace("{VARIANT_ID}", this._gem.name.replace(" ", ""));
+
+        return URLSafeBase64.encode(Buffer.from(window.electron.deflate(Buffer.from(new TextEncoder().encode(xml)))));
     }
 }

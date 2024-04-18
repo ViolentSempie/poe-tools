@@ -8,6 +8,7 @@ interface SkillGemTypeWiki {
 interface SkillTypeWiki {
     _pageTitle: string;
     "skill icon": string;
+    "skill id": string;
     "stat text": string;
     "max level": number;
 }
@@ -15,11 +16,14 @@ interface SkillTypeWiki {
 interface ItemTypeWiki {
     _pageTitle: string;
     "base item id": string;
+    "metadata id": string;
     class: string;
     "class id": string;
 }
 
 export type SkillGem = {
+    id: string;
+    skillId: string;
     name: string;
     description: string;
     icon: string;
@@ -74,6 +78,7 @@ export async function getSkills(): Promise<SkillGem[]> {
         "items.base_item_id",
         "items.class",
         "items.class_id",
+        "items.metadata_id",
         "items.icon",
         "items.inventory_icon",
     ], [
@@ -83,6 +88,7 @@ export async function getSkills(): Promise<SkillGem[]> {
     const skills = await executeQuery<SkillTypeWiki>("skill", [
         "_pageTitle",
         "skill_icon",
+        "skill_id",
         "stat_text",
         "max_level",
     ], [
@@ -115,6 +121,8 @@ export async function getSkills(): Promise<SkillGem[]> {
         }
 
         return {
+            id: item["metadata id"],
+            skillId: skill["skill id"],
             name: skillGem["_pageTitle"],
             description: skillGem["gem description"],
             stats: skill["stat text"]?.split("&lt;br&gt;") ?? "",

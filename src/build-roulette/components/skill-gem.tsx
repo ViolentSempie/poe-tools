@@ -18,15 +18,15 @@ export function SkillGem() {
     const setRandomGem = () => {
         // randomize a number between 0 and gems.length
         const randomGem = Math.floor(Math.random() * gems.length);
-        setSelectedSkillGem(randomGem);
+        setSelectedSkillGem(gems[randomGem]);
     };
 
     return (
         <div className="flex flex-col gap-y-2">
             {selectedSkillGem !== null && (
                 <div className="flex flex-col gap-y-2">
-                    <span className="font-medium">{gems[selectedSkillGem]?.name ?? "Loading gem name"}</span>
-                    <span className="text-sm">{gems[selectedSkillGem]?.description ?? "Loading gem description"}</span>
+                    <span className="font-medium">{selectedSkillGem?.name ?? "Loading gem name"}</span>
+                    <span className="text-sm">{selectedSkillGem?.description ?? "Loading gem description"}</span>
                 </div>
             )}
 
