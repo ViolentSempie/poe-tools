@@ -99,7 +99,7 @@ export default function SettingsModal({ open, setOpen }: SettingsModalProps) {
                                             {tabs.find((tab) => tab.name === "Features" && tab.current) && ( 
                                                 <FeaturesTab />
                                             )}
-                                            {tabs.find((tab) => tab.name === "Exile Leveling" && tab.current) && (
+                                            {tabs.find((tab) => tab.name === "exile leveling" && tab.current) && (
                                                 <ExileLevelingTab />
                                             )}
                                         </div>
