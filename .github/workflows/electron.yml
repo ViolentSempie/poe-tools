@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-latest
+          # - ubuntu-latest
           # - macos-latest
           - windows-latest
         node_version:
@@ -34,12 +34,12 @@ jobs:
         architecture:
           - x64
         include:
-          - os: ubuntu-latest
-            release_file: "unknown"
+          # - os: ubuntu-latest
+          #   release_file: "unknown"
           - os: windows-latest
             release_file: "unknown"
-          - os: macos-latest
-            release_file: "unknown"
+          # - os: macos-latest
+          #   release_file: "unknown"
     name: Build for Platform - ${{ matrix.architecture }} on ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
