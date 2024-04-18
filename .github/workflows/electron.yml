@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os:
-          # - ubuntu-latest
+          - ubuntu-latest
           # - macos-latest
           - windows-latest
         node_version:
@@ -34,10 +34,15 @@ jobs:
         architecture:
           - x64
         include:
-          # - os: ubuntu-latest
-          #   release_file: "unknown"
+          - os: ubuntu-latest
+            release_file: |
+              out/make/deb/x64/*.deb
+              out/make/rpm/x64/*.rpm
+              out/make/zip/linux/x64/*.zip
           - os: windows-latest
-            release_file: "out/make/squirrel.windows/x64/*.exe"
+            release_file: |
+              out/make/squirrel.windows/x64/*.exe
+              out/make/zip/win32/x64/*.zip
           # - os: macos-latest
           #   release_file: "unknown"
     name: Build for Platform - ${{ matrix.architecture }} on ${{ matrix.os }}
@@ -52,16 +57,6 @@ jobs:
     - run: yarn install --frozen-lockfile
     - run: yarn tsc --noEmit
     - run: yarn make
-    - run: ls out
-    - name: Package linux build
-      if: matrix.os == 'ubuntu-latest'
-      run: echo "TODO"
-    - name: Package windows build
-      if: matrix.os == 'windows-latest'
-      run: echo "TODO"
-    - name: Package macOS build
-      if: matrix.os == 'macos-latest'
-      run: echo "TODO"
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
