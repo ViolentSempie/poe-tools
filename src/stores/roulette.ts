@@ -12,6 +12,7 @@ type BuildRouletteStore = {
     setSelectedSkillGem: (skillGem: SkillGem) => void;
     setSelectedClass: (classId: number) => void;
     initialize: () => void;
+    resetBuild: () => void;
     buildGenerator: () => Promise<BuildGenerator>;
     generateBuild: () => Promise<void>;
     reset: () => void;
@@ -42,6 +43,7 @@ export const useRouletteStore = create<BuildRouletteStore>()(
 
                     return new BuildGenerator(get().passiveTree, get().selectedSkillGem!);
                 },
+                resetBuild: () => set({ build: null }),
                 generateBuild: async () => {
                     set({ build: (await get().buildGenerator()).generate(get().selectedClass)})
                 },
