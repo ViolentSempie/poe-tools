@@ -1,6 +1,6 @@
 ## Sempie's PoE tools
 
-This is an electron / react / vite app with some tools that I enjoy.<br />
+An overlay app that has a few features that I've made for my own personal use.<br />
 Follows the PoE third-party guidelines as much as I can.<br />
 This tool only reads the Client.txt log file.
 
