@@ -8,6 +8,7 @@ export function SkillGem() {
     const [gems, setGems] = useState<SkillGemType[]>([]);
     const selectedSkillGem = useRouletteStore((state) => state.selectedSkillGem);
     const setSelectedSkillGem = useRouletteStore((state) => state.setSelectedSkillGem);
+    const resetBuild = useRouletteStore((state) => state.resetBuild);
 
     useEffect(() => {
         getSkills().then((data) => {
@@ -19,6 +20,7 @@ export function SkillGem() {
         // randomize a number between 0 and gems.length
         const randomGem = Math.floor(Math.random() * gems.length);
         setSelectedSkillGem(gems[randomGem]);
+        resetBuild();
     };
 
     return (
