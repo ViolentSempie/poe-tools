@@ -5,7 +5,7 @@ const { app, BrowserWindow, globalShortcut } = require("electron");
 const path = require("path");
 const { OverlayController, OVERLAY_WINDOW_OPTS } = require("electron-overlay-window");
 
-const toggleMouseKey = "CmdOrCtrl + F";
+const toggleMouseKey = "Alt + F";
 
 const createOverlay = () => {
     const browserWindow = new BrowserWindow({
