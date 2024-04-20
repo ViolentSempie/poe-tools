@@ -42,6 +42,7 @@ const bannedTags = [
     "Aura",
     "Trigger",
     "Guard",
+    "Golem",
 ];
 
 const bannedGems = [
@@ -49,6 +50,8 @@ const bannedGems = [
     "Portal",
     "Devouring Totem",
     "Decoy Totem",
+    "Detonating Mines",
+    "Blink Arrow",
 ];
 
 async function executeQuery<T>(table: string, fields: string[], where: string[], offset = 0): Promise<T[]> {
