@@ -16,6 +16,8 @@ export const VERSION_MAPPING = {
 
 export const BANNED_COMBINATIONS = [
     ["Chaos Inoculation", "Pain Attunement"],
+    ["Chaos Inoculation", "Ghost Reaver"],
+    ["Chaos Inoculation", "The Agnostic"],
     ["Runebinder", "Ancestral Bond"],
     ["Minion Instability", "Ancestral Bond"],
     ["Solipsism", "Magebane"],
@@ -32,7 +34,7 @@ export const EXPORT_BASE = `<?xml version="1.0" encoding="UTF-8"?>
 	<Skills sortGemsByDPSField="CombinedDPS" activeSkillSet="1" sortGemsByDPS="true" defaultGemQuality="0" defaultGemLevel="normalMaximum" showSupportGemTypes="ALL" showAltQualityGems="false">
 		<SkillSet id="1">
 			<Skill mainActiveSkillCalcs="1" includeInFullDPS="nil" label="" enabled="true" mainActiveSkill="1">
-				<Gem enableGlobal2="true" level="20" gemId="{GEM_ID}" variantId="{VARIANT_ID}" skillId="{SKILL_ID}" quality="0" qualityId="Default" enableGlobal1="true" enabled="true" count="1" nameSpec="{GEM_NAME}"/>
+				<Gem enableGlobal2="true" level="1" gemId="{GEM_ID}" variantId="{VARIANT_ID}" skillId="{SKILL_ID}" quality="0" qualityId="Default" enableGlobal1="true" enabled="true" count="1" nameSpec="{GEM_NAME}"/>
 			</Skill>
 		</SkillSet>
 	</Skills>
