@@ -1,16 +1,18 @@
 import { getRandomElement, getShortestPath } from "./utils";
-import { BANNED_COMBINATIONS, EXPORT_BASE, MAX_DISTANCE_BETWEEN_KEYSTONES, NUMBER_OF_KEYSTONES } from "./constants";
+import { BANNED_COMBINATIONS, EXPORT_BASE, MAX_DISTANCE_BETWEEN_KEYSTONES, NUMBER_OF_KEYSTONES, XMLType } from "./constants";
 import { PassiveTree } from "./passive-tree/passive-tree";
 import { Node } from "./passive-tree/types/passive-tree";
 import { shuffleArray } from "@/utils/shuffle-array";
 import URLSafeBase64 from 'urlsafe-base64';
 import { SkillGem } from "../skills";
+import { XMLParser } from "fast-xml-parser";
 
 export interface GeneratedBuild {
     classNode: Node;
     keystones: Node[];
     path: Node[];
-    skillGem: unknown;
+    skillGem: SkillGem | null;
+    skillGemId: string;
     exportString: string;
 }
 
@@ -18,11 +20,91 @@ export class BuildGenerator {
     private _tree: PassiveTree;
     private _selectedNodes: Node[] = [];
     private _selectedKeystones: Node[] = [];
+    private _keystoneBlacklist: Node[] = [];
     private _gem: SkillGem;
 
     public constructor(tree: PassiveTree, gem: SkillGem) {
         this._tree = tree;
         this._gem = gem;
+    }
+
+    public static importBuildString(tree: PassiveTree, buildString: string, gemFinder?: (gemId: string) => SkillGem | null): GeneratedBuild | null {
+        const xml = new TextDecoder().decode(window.electron.inflate(Buffer.from(URLSafeBase64.decode(buildString))));
+        const parser = new XMLParser({
+            ignoreAttributes: false,
+            isArray: (name, jpath) => {
+                return [
+                    "PathOfBuilding.Skills.SkillSet",
+                    "PathOfBuilding.Tree.Spec",
+                    "PathOfBuilding.Items.ItemSet",
+                ].includes(jpath);
+            },
+        });
+
+        const data = parser.parse(xml) as XMLType;
+
+        // todo: validate the xml somehow
+
+        const selectedNodesList = data.PathOfBuilding.Tree.Spec[0]["@_nodes"].split(',').map((x) => +x);
+        const selectedNodes = selectedNodesList.map((id) => tree.nodes[id]);
+        const selectedKeystones = selectedNodes.filter((node) => node.isKeystone);
+
+        const build: GeneratedBuild = {
+            classNode: tree.classes[+data.PathOfBuilding.Tree.Spec[0]["@_classId"]],
+            keystones: selectedKeystones,
+            path: selectedNodes,
+            exportString: buildString,
+            skillGem: gemFinder?.(data.PathOfBuilding.Skills.SkillSet[0].Skill.Gem["@_gemId"]) ?? null,
+            skillGemId: data.PathOfBuilding.Skills.SkillSet[0].Skill.Gem["@_gemId"],
+        };
+
+        return build;
+    }
+
+    public generateFromExisting(build: GeneratedBuild, blacklist: Node[]) {
+        this._keystoneBlacklist = blacklist;
+
+        const classNode = build.classNode;
+        let iteration = 0;
+
+        while (++iteration < 100) {
+            this._selectedNodes = [classNode];
+            this._selectedKeystones = build.keystones.filter(x => !blacklist.includes(x));
+
+            for (const keystone of this._selectedKeystones) {
+                const shortestPath = getShortestPath(keystone, this._tree, this._selectedNodes)[0];
+
+                this.markPath(shortestPath.id, keystone.id);
+            }
+
+            let subIteration = 0;
+
+            do {
+                const [keystone, node] = this.pickKeystone() ?? [null, null];
+
+                if (!keystone || !node) {
+                    continue;
+                }
+
+                this.markPath(node.id, keystone.id);
+                this._selectedKeystones.push(keystone);
+            } while (this._selectedKeystones.length < NUMBER_OF_KEYSTONES && ++subIteration < 15);
+
+            if (this._selectedKeystones.length !== NUMBER_OF_KEYSTONES) {
+                continue;
+            }
+
+            return {
+                classNode: classNode,
+                keystones: this._selectedKeystones,
+                path: this._selectedNodes,
+                exportString: this.exportBuildString(classNode),
+                skillGem: this._gem,
+                skillGemId: this._gem.id,
+            };
+        }
+
+        return null;
     }
 
     /**
@@ -51,7 +133,7 @@ export class BuildGenerator {
                 if (!keystone || !node) {
                     continue;
                 }
-                
+
                 this.markPath(node.id, keystone.id);
                 this._selectedKeystones.push(keystone);
             } while (this._selectedKeystones.length < NUMBER_OF_KEYSTONES && ++subIteration < 15);
@@ -65,7 +147,8 @@ export class BuildGenerator {
                 keystones: this._selectedKeystones,
                 path: this._selectedNodes,
                 exportString: this.exportBuildString(classNode),
-                skillGem: null,
+                skillGem: this._gem,
+                skillGemId: this._gem.id,
             };
         }
 
@@ -74,7 +157,7 @@ export class BuildGenerator {
 
     /**
      * Picks a keystone node from the passive tree that meets the specified criteria.
-     * 
+     *
      * @param tree - The passive tree.
      * @param selectedNodes - The nodes that have already been selected.
      * @param selectedKeystones - The keystone nodes that have already been selected.
@@ -91,7 +174,7 @@ export class BuildGenerator {
 
     /**
      * Marks a path between two nodes in the tree.
-     * 
+     *
      * @param from - The starting node ID.
      * @param to - The ending node ID.
      */
@@ -127,11 +210,15 @@ export class BuildGenerator {
 
     /**
      * Checks if a keystone is banned based on the selected keystones.
-     * 
+     *
      * @param keystone - The keystone to check.
      * @returns True if the keystone is banned, false otherwise.
      */
     private isBanned(keystone: Node) {
+        if (this._keystoneBlacklist.includes(keystone)) {
+            return true;
+        }
+
         const bannedList = BANNED_COMBINATIONS.filter(x => x.includes(keystone.name));
 
         for (const bannedCombination of bannedList) {

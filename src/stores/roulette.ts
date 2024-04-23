@@ -1,16 +1,18 @@
 import { BuildGenerator, GeneratedBuild } from "@/build-roulette/generator/generator";
 import { PassiveTree } from "@/build-roulette/generator/passive-tree/passive-tree";
-import { SkillGem } from "@/build-roulette/skills";
+import { SkillGem, getSkills } from "@/build-roulette/skills";
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 type BuildRouletteStore = {
     passiveTree: PassiveTree;
     build: GeneratedBuild | null;
+    skillGems: SkillGem[] | null;
     selectedSkillGem: SkillGem | null;
     selectedClass: number;
     setSelectedSkillGem: (skillGem: SkillGem) => void;
     setSelectedClass: (classId: number) => void;
+    setBuild: (build: GeneratedBuild) => void;
     initialize: () => void;
     resetBuild: () => void;
     buildGenerator: () => Promise<BuildGenerator>;
@@ -25,15 +27,19 @@ export const useRouletteStore = create<BuildRouletteStore>()(
             (set, get) => ({
                 passiveTree: new PassiveTree(),
                 build: null,
-                selectedSkillGemData: null,
+                skillGems: null,
                 selectedSkillGem: null,
                 selectedClass: 0,
 
                 setSelectedSkillGem: (skillGem) => set({ selectedSkillGem: skillGem }),
                 setSelectedClass: (classId) => set({ selectedClass: classId }),
+                setBuild: (build) => set({ build: build }),
 
                 initialize: () => {
                     get().passiveTree?.load();
+                    getSkills().then((data) => {
+                        set({ skillGems: data });
+                    });
                 },
 
                 buildGenerator: async () => {

@@ -1,25 +1,26 @@
 import { PoeEventManager } from "./poe-events/poe-event-manager";
+import { updateElectronApp } from 'update-electron-app';
+import { app, BrowserWindow, globalShortcut, ipcMain } from "electron";
+import path from "path";
+import { OverlayController, OVERLAY_WINDOW_OPTS } from "electron-overlay-window";
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { app, BrowserWindow, globalShortcut } = require("electron");
-const path = require("path");
-const { OverlayController, OVERLAY_WINDOW_OPTS } = require("electron-overlay-window");
+updateElectronApp();
 
 const toggleMouseKey = "CmdOrCtrl + F";
 
-const createOverlay = () => {
+const createWindow = (overlay = true) => {
     const browserWindow = new BrowserWindow({
-        width: 400,
-        height: 300,
+        width: 800,
+        height: 600,
+        ...(overlay ? {} : { backgroundColor: "black" }),
         webPreferences: {
+            backgroundThrottling: false,
             webSecurity: false,
             preload: path.join(__dirname, "preload.js"),
             nodeIntegration: true
         },
-        ...OVERLAY_WINDOW_OPTS,
+        ...(overlay ? OVERLAY_WINDOW_OPTS : {}),
     });
-    browserWindow.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-    browserWindow.setAlwaysOnTop(true, 'screen-saver', 1);
 
     function makeInteractive() {
         let isInteractive = false;
@@ -55,6 +56,14 @@ const createOverlay = () => {
         browserWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
     }
 
+    new PoeEventManager(browserWindow);
+
+    if (!overlay) {
+        return browserWindow;
+    }
+
+    // todo: figure out how to change from overlay to window
+
     makeInteractive();
 
     OverlayController.attachByTitle(
@@ -63,15 +72,27 @@ const createOverlay = () => {
         { hasTitleBarOnMac: true }
     );
 
-    new PoeEventManager(browserWindow);
+    return browserWindow;
 };
 
 
-app.on("ready", () => {
-    setTimeout(
-        createOverlay,
-        process.platform === "linux" ? 1000 : 0 // https://github.com/electron/electron/issues/16809
-    );
+app.on("ready", async () => {
+    await new Promise((resolve) => setTimeout(resolve, process.platform === "linux" ? 1000 : 0));
+
+    let isOverlay = true;
+    let browserWindow = createWindow(isOverlay);
+
+    // ipcMain.on("poe-switch-overlay-status", (event, [overlay]: [boolean]) => {
+    //     console.log(event, overlay);
+    //     if (overlay === isOverlay) {
+    //         return;
+    //     }
+
+    //     isOverlay = !isOverlay;
+
+    //     browserWindow.close();
+    //     browserWindow = createWindow(isOverlay);
+    // });
 });
 
 app.on("window-all-closed", () => {

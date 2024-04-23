@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import { SkillGem as SkillGemType, getSkills } from "../skills";
 import { useRouletteStore } from "@/stores/roulette";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDiceD20 } from "@fortawesome/free-solid-svg-icons";
+import { faDiceD20, faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export function SkillGem() {
-    const [gems, setGems] = useState<SkillGemType[]>([]);
     const selectedSkillGem = useRouletteStore((state) => state.selectedSkillGem);
     const setSelectedSkillGem = useRouletteStore((state) => state.setSelectedSkillGem);
+    const skillGems = useRouletteStore((state) => state.skillGems);
     const resetBuild = useRouletteStore((state) => state.resetBuild);
 
-    useEffect(() => {
-        getSkills().then((data) => {
-            setGems(data);
-        });
-    }, []);
+    console.log(selectedSkillGem);
+
+    if (!skillGems) {
+        return <FontAwesomeIcon icon={faSpinner} spin />;
+    }
 
     const setRandomGem = () => {
         // randomize a number between 0 and gems.length
-        const randomGem = Math.floor(Math.random() * gems.length);
-        setSelectedSkillGem(gems[randomGem]);
+        const randomGem = Math.floor(Math.random() * skillGems.length);
+        setSelectedSkillGem(skillGems[randomGem]);
         resetBuild();
     };
 

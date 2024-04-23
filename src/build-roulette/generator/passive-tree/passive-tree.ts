@@ -2,6 +2,7 @@ import { Node, PassiveTree as PassiveTreeType } from "./types/passive-tree";
 import createGraph from "ngraph.graph";
 import path from "ngraph.path";
 import { DEFAULT_VERSION, VERSION_MAPPING } from "../constants";
+import { BuildGenerator } from "../generator";
 
 export interface ImageCoordinate {
     x: number;
@@ -87,10 +88,11 @@ export class PassiveTree
         const response = await fetch(VERSION_MAPPING[this._version].url);
         const data = await response.json();
 
-        console.log(data);
-
         this.processData(data);
         this._loaded = true;
+
+        const build = BuildGenerator.importBuildString(this, "eJx1VNtu2zgQfU6-guAzt-JFV8BK4SQbI0CcZtfZ9rGgpXHMliJdkXLjv1-QkjZOgH0bDQ9nzpw51OLza6fREXqnrKkx-0QxAtPYVpmXGv_zfPdHiT9fXS6epN9_2V0PSoeTq8uLRYyRhiPoGjOOkZf9C_ivcynxnWJ0kMbvwZq1_GH7lW1r_GgNYLSVplV-_mq0dO5RdlDjb8o3e4yka8C0N2_5CbiXvWw89A-h7XLwdm1bqLHvB8Cok8psbPMT_Kq3w6HGDKOjgt8j5n799OXv5zNKypxTCiMlcaYQPfcASDZeHWFzgCaUurq8uFiED9RJ56E__bnbQeNdjd_RvW9rTDEytgVX4yxN04JkOS0yIoRglGS8ykla5RkjomRFTsoqLYngnFHCWV6UJCs4zwkXWUpJxooyJ7zMipQIkaUZYSUVgqQ5rTjJWMUFScuiKIko8oIRXuRZRXKRc0pEmleEi7RgJMuzsiJZSkvCWFoVhIuSMFryighOK0bSlFFBOC0ZJ4IVVGDkoLGmlf1p-X44ozRGvgc42zRPpyUGgBilSoJWUdUgZgg2P5XWDjnb-xV07vp0-7S5U6DbGt_YbqsMtLdPGzzrHtAb8HGN7-7M-25hJwcd8n8NUit_isq_ZR9Gbxrbd1Kv5avqhg4jt7e_N8PhMFZ8Ph3CnpYPD-PJUvupWGhX453UDqbdT4SQamc_TMnovOUb6xupGxd5K9PooYV7czdoHalH-bTcBmbhqcmthvbcwWd1_mtzsVhBN4FX2m6l5vOV6QFyitELdEH_NXjZSi-Tew-dS8IcSSy3gu6ut85fW-0f7VFidJS9ksaHW19t7-EVIxeQIfEB-utM4ikOqNtRbfyOHJvJfRivsYMZ92lkNz2sqW8yyjkSnfwz6R09NHonhHGqySMhni0yONhEy34DebAmpoPYsdgE_F_Q2U4XyQSOfWO3EN1Ys1Pxx5fM4SL58Ff8F6LjqBU");
+        console.log(build);
     }
 
     /**
@@ -133,7 +135,7 @@ export class PassiveTree
 
     /**
      * Processes the data for the passive tree.
-     * 
+     *
      * @param data - The data for the passive tree.
      */
     private processData(data: PassiveTreeType) {
@@ -152,7 +154,7 @@ export class PassiveTree
 
     /**
      * Processes the nodes in the passive tree data.
-     * 
+     *
      * @param data - The passive tree data.
      */
     private processNodes(data: PassiveTreeType) {
@@ -199,12 +201,12 @@ export class PassiveTree
 
     /**
      * Processes the sprites data and updates the image coordinates.
-     * 
+     *
      * @param data - The passive tree data containing the sprites.
      */
     private processSprites(data: PassiveTreeType) {
         for (const spriteKey in data.sprites) {
-            const imageData = data.sprites[spriteKey]["0.3835"] ?? data.sprites[spriteKey][1] ?? data.sprites[spriteKey][+Object.keys(data.sprites[spriteKey])[0] ?? null];
+            const imageData = data.sprites[spriteKey]["0.3835"] ?? data.sprites[spriteKey][1] ?? data.sprites[spriteKey][+(Object.keys(data.sprites[spriteKey])[0] ?? null)];
 
             if (imageData === undefined) {
                 console.log(data.sprites[spriteKey]);

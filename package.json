@@ -4,7 +4,8 @@
   "description": "Path of Exile Tools",
   "license": "GPL-3.0-only",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "repository": "github:ViolentSempie/poe-tools",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -67,6 +68,7 @@
     "ngraph.path": "^1.5.0",
     "poe-log-events": "^4.0.0",
     "steam-game-path": "^2.2.0",
+    "update-electron-app": "^3.0.0",
     "urlsafe-base64": "^1.0.0"
   }
 }

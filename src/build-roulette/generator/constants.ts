@@ -23,6 +23,79 @@ export const BANNED_COMBINATIONS = [
     ["Solipsism", "Magebane"],
 ];
 
+export interface XMLType {
+	"?xml": {
+		"@_encoding": string;
+		"@_version": string;
+	};
+	"PathOfBuilding": {
+		Build: {
+			"@_ascendClassName": string;
+			"@_bandit": string;
+			"@_characterLevelAutoMode": string;
+			"@_className": string;
+			"@_level": string;
+			"@_mainSocketGroup": string;
+			"@_pantheonMajorGod": string;
+			"@_pantheonMinorGod": string;
+			"@_targetVersion": string;
+			"@_viewMode": string;
+		};
+		Config: unknown;
+		Items: {
+			"@_activeItemSet": string;
+			"@_useSecondWeaponSet": string;
+			ItemSet: {
+				"@_id": string;
+				"@_useSecondWeaponSet": string;
+			}[];
+		};
+		Skills: {
+			"@_activeSkillSet": string;
+			"@_defaultGemLevel": string;
+			"@_defaultGemQuality": string;
+			"@_showAltQualityGems": string;
+			"@_showSupportGemTypes": string;
+			"@_sortGemsByDPS": string;
+			"@_sortGemsByDPSField": string;
+			SkillSet: {
+				"@_id": string;
+				Skill: {
+					"@_enabled": string;
+					"@_includeInFullDPS": string;
+					"@_label": string;
+					"@_mainActiveSkill": string;
+					"@_mainActiveSkillCalcs": string;
+					Gem: {
+						"@_count": string;
+						"@_enableGlobal1": string;
+						"@_enableGlobal2": string;
+						"@_enabled": string;
+						"@_gemId": string;
+						"@_level": string;
+						"@_nameSpec": string;
+						"@_quality": string;
+						"@_qualityId": string;
+						"@_skillId": string;
+						"@_variantId": string;
+					};
+				};
+			}[];
+		};
+		Tree: {
+			"@_activeSpec": string;
+			Spec: {
+				"@_ascendClassId": string;
+				"@_classId": string;
+				"@_masteryEffects": string;
+				"@_nodes": string;
+				"@_secondaryAscendClassId": string;
+				"@_treeVersion": string;
+			}[];
+		};
+	};
+}
+
 export const EXPORT_BASE = `<?xml version="1.0" encoding="UTF-8"?>
 <PathOfBuilding>
 	<Build level="12" targetVersion="3_0" pantheonMajorGod="None" bandit="None" className="{CLASS_NAME}" ascendClassName="None" characterLevelAutoMode="true" mainSocketGroup="1" viewMode="IMPORT" pantheonMinorGod="None">
