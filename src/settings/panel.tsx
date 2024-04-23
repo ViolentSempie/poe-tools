@@ -48,7 +48,7 @@ export function Panel() {
                 </button>
             </div>
 
-            {/* {hotkeyHelperTextFeature.enabled && isOverlay && <span className="ml-2 text-sm rounded-md p-2 bg-opacity-70 bg-slate-800">Ctrl + F to enable overlay</span>} */}
+            {hotkeyHelperTextFeature.enabled && <span className="ml-2 text-sm rounded-md p-2 bg-opacity-70 bg-slate-800">Alt + F to enable overlay</span>}
 
             <BuildRouletteModal open={rouletteOpen} setOpen={setRouletteOpen} />
             <SettingsModal open={open} setOpen={setOpen} />

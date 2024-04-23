@@ -6,7 +6,7 @@ import { OverlayController, OVERLAY_WINDOW_OPTS } from "electron-overlay-window"
 
 updateElectronApp();
 
-const toggleMouseKey = "CmdOrCtrl + F";
+const toggleMouseKey = "Alt + F";
 
 const createWindow = (overlay = true) => {
     const browserWindow = new BrowserWindow({
